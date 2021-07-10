@@ -27,7 +27,7 @@
                     <input class="input-filled" type="text" id="color" placeholder="Placeholder" />
                     <div class="ripple-line"></div>
                 </div>
-                <div class="input-group-text input-group-color"></div>
+                <label class="input-group-text input-group-color" for="color"></label>
             </div>
         </div>
         <table class="table table-sm table-bordered" id="paletteTable">
@@ -110,6 +110,25 @@
 
             const getTextColor = (background, foreground) => Color.findContrast(background, foreground);
 
+            const createCell = (color, shade, tr) => {
+                const td = dom.create('td');
+                dom.setStyle(td, {
+                    backgroundColor: shade,
+                    color: getTextColor(shade, color),
+                    width: '33%',
+                    cursor: 'pointer'
+                });
+                dom.setText(td, shade.toHexString());
+                dom.append(tr, td);
+
+                dom.addEvent(td, 'click', _ => {
+                    dom.setValue(colorInput, shade.toHexString());
+                    dom.triggerEvent(colorInput, 'change');
+                });
+
+                return td;
+            };
+
             const makePalette = (color, table, shades) => {
                 const tbody = dom.child(table, 'tbody').shift();
                 dom.empty(tbody);
@@ -119,41 +138,16 @@
                     const tr = dom.create('tr');
                     dom.append(tbody, tr);
 
-                    const tint = palette.tints[i];
-                    const tintTd = dom.create('td');
-                    dom.setStyle(tintTd, {
-                        backgroundColor: tint,
-                        color: getTextColor(tint, color)
-                    });
-                    dom.setText(tintTd, tint.toHexString());
-                    dom.append(tr, tintTd);
+                    const tintTd = createCell(color, palette.tints[i], tr);
 
                     if (i === 0) {
+                        dom.setStyle(tintTd, 'width', '');
                         dom.setAttribute(tintTd, 'colspan', 3);
                         continue;
                     }
 
-                    dom.setStyle(tintTd, 'width', '33%');
-
-                    const tone = palette.tones[i];
-                    const toneTd = dom.create('td');
-                    dom.setStyle(toneTd, {
-                        backgroundColor: tone,
-                        color: getTextColor(tone, color),
-                        width: '33%'
-                    });
-                    dom.setText(toneTd, tone.toHexString());
-                    dom.append(tr, toneTd);
-
-                    const shade = palette.shades[i];
-                    const shadeTd = dom.create('td');
-                    dom.setStyle(shadeTd, {
-                        backgroundColor: shade,
-                        color: getTextColor(shade, color),
-                        width: '33%'
-                    });
-                    dom.setText(shadeTd, shade.toHexString());
-                    dom.append(tr, shadeTd);
+                    createCell(color, palette.tones[i], tr);
+                    createCell(color, palette.shades[i], tr);
                 }
 
                 table.append(tbody);
