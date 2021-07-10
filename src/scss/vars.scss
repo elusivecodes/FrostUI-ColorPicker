@@ -1,0 +1,50 @@
+$spacing: 1rem !default;
+
+$disabled-opacity: .5 !default;
+
+// border
+$border-size: 1px !default;
+$border-style: solid !default;
+
+// color
+$white: #fff !default;
+$black: #000 !default;
+
+$border-color: fade($black, .15) !default;
+
+// z index
+$dropdown-z-index: 1000 !default;
+
+// colorpicker
+$colorpicker-background-color: $white !default;
+$colorpicker-border-size: $border-size !default;
+$colorpicker-border-color: $border-color !default;
+
+$colorpicker-saturation-size: 200px !default;
+$colorpicker-saturation-cursor: crosshair !default;
+$colorpicker-saturation-background: linear-gradient(to bottom, transparent 0%, #000 100%), linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%) !default;
+$colorpicker-saturation-guide-size: 6px !default;
+$colorpicker-saturation-guide-border-size: $colorpicker-border-size !default;
+$colorpicker-saturation-guide-border-color: $black !default;
+$colorpicker-saturation-guide-border-radius: 50% !default;
+$colorpicker-saturation-guide-box-shadow: 0 0 0 $border-size fade($white, .8) !default;
+
+$colorpicker-hue-alpha-size: 25px !default;
+$colorpicker-hue-alpha-cursor: row-resize !default;
+$colorpicker-horizontal-hue-alpha-cursor: col-resize !default;
+$colorpicker-hue-alpha-guide-size: 4px !default;
+$colorpicker-hue-alpha-guide-background-color: fade($white, .8) !default;
+$colorpicker-hue-alpha-guide-border-size: $colorpicker-border-size !default;
+$colorpicker-hue-alpha-guide-border-color: fade($black, .4) !default;
+$colorpicker-hue-background: linear-gradient(to top, #f00 0%, #ff8000 8%, #ff0 17%, #80ff00 25%, #0f0 33%, #00ff80 42%, #0ff 50%, #0080ff 58%, #00f 67%, #8000ff 75%, #f0f 83%, #ff0080 92%, #f00 100%) !default;
+$colorpicker-horizontal-hue-background: linear-gradient(to left, #f00 0%, #ff8000 8%, #ff0 17%, #80ff00 25%, #0f0 33%, #00ff80 42%, #0ff 50%, #0080ff 58%, #00f 67%, #8000ff 75%, #f0f 83%, #ff0080 92%, #f00 100%) !default;
+$colorpicker-alpha-background: linear-gradient(45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1) 0), linear-gradient(45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1) 0), #fff !default;
+$colorpicker-alpha-background-size: 10px !default;
+
+$colorpicker-bar-height: 1rem !default;
+$colorpicker-bar-box-shadow: 0 0 0 $border-size fade($black, .2) !default;
+
+$colorpicker-disabled-cursor: not-allowed !default;
+$colorpicker-disabled-opacity: $disabled-opacity !default;
+
+$input-group-color-width: 2rem;

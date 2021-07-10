@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrostUI ColorPicker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui/dist/frost-ui.css">
+    <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor/dist/frost-color.js"></script>
+    <script src="../dist/frost-ui-colorpicker.js"></script>
+</head>
+
+<body>
+    <div class="container pt-5">
+        <div class="mb-4">
+            <label for="colorDefault">Default</label>
+            <div class="form-input">
+                <input class="input-filled" type="text" id="colorDefault" />
+                <div class="ripple-line"></div>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorHex">Hex Format</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorHex" value="#228c22" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorHex"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorRGB">RGB Format</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorRGB" value="rgb(245, 161, 25)" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorRGB"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorHSL">HSL Format</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorHSL" value="hsl(348, 83%, 47%)" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorHSL"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorName">Named Format</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorName" value="blue" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorName"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorDisabled">Disabled</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorDisabled" value="#000" disabled />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorDisabled"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorHorizontal">Horizontal</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" type="text" id="colorHorizontal" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorHorizontal" data-ui-horizontal="true"></label>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorInline">Inline</label>
+            <div class="form-input">
+                <input class="input-filled" type="text" id="colorInline" data-ui-inline="true" />
+                <div class="ripple-line"></div>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorInlineDisabled">Inline Disabled</label>
+            <div class="form-input">
+                <input class="input-filled" type="text" id="colorInlineDisabled" data-ui-inline="true" disabled />
+                <div class="ripple-line"></div>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="colorAlphaDisabled">Alpha Disabled</label>
+            <div class="form-input">
+                <input class="input-filled" type="text" id="colorAlphaDisabled" data-ui-alpha="false" />
+                <div class="ripple-line"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const colorDefault = dom.findOne('#colorDefault');
+        const colorHex = dom.findOne('#colorHex');
+        const colorRGB = dom.findOne('#colorRGB');
+        const colorHSL = dom.findOne('#colorHSL');
+        const colorName = dom.findOne('#colorName');
+        const colorDisabled = dom.findOne('#colorDisabled');
+        const colorHorizontal = dom.findOne('#colorHorizontal');
+        const colorInline = dom.findOne('#colorInline');
+        const colorInlineDisabled = dom.findOne('#colorInlineDisabled');
+        const colorAlphaDisabled = dom.findOne('#colorAlphaDisabled');
+
+        UI.ColorPicker.init(colorDefault);
+        UI.ColorPicker.init(colorHex);
+        UI.ColorPicker.init(colorRGB);
+        UI.ColorPicker.init(colorHSL);
+        UI.ColorPicker.init(colorName);
+        UI.ColorPicker.init(colorDisabled);
+        UI.ColorPicker.init(colorHorizontal);
+        UI.ColorPicker.init(colorInline);
+        UI.ColorPicker.init(colorInlineDisabled);
+        UI.ColorPicker.init(colorAlphaDisabled);
+    </script>
+</body>
+
+</html>

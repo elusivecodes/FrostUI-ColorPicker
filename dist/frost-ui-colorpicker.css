@@ -1,0 +1,127 @@
+.colorpicker {
+  z-index: 1000;
+  display: block;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.colorpicker-inline {
+  display: inline-block;
+  border: 0;
+}
+
+.colorpicker-saturation {
+  position: relative;
+  z-index: 1;
+  width: 200px;
+  height: 200px;
+  cursor: crosshair;
+  background: linear-gradient(to bottom, transparent 0%, #000 100%), linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%);
+}
+.colorpicker-saturation .colorpicker-guide {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #000;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+  transform: translate(-50%, -50%);
+  cursor: crosshair;
+}
+
+.colorpicker-hue {
+  background: linear-gradient(to top, #f00 0%, #ff8000 8%, #ff0 17%, #80ff00 25%, #0f0 33%, #00ff80 42%, #0ff 50%, #0080ff 58%, #00f 67%, #8000ff 75%, #f0f 83%, #ff0080 92%, #f00 100%);
+}
+
+.colorpicker-alpha,
+.colorpicker-preview {
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.1) 0), linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.1) 0), #fff;
+  background-position: 0 0, 5px 5px;
+  background-size: 10px 10px;
+}
+
+.colorpicker-alpha {
+  position: relative;
+}
+
+.colorpicker-alpha-color {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.colorpicker-bar {
+  position: relative;
+  max-width: 100%;
+  height: 1rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.colorpicker-bar div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.colorpicker-hue,
+.colorpicker-alpha {
+  position: relative;
+  z-index: 1;
+  width: 25px;
+  height: 200px;
+  cursor: row-resize;
+}
+.colorpicker-hue .colorpicker-guide,
+.colorpicker-alpha .colorpicker-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  transform: translateY(-50%);
+  cursor: row-resize;
+}
+
+.colorpicker-guide {
+  padding: 0;
+  background-color: transparent;
+}
+.colorpicker-guide:focus {
+  outline: 0;
+}
+
+.colorpicker-horizontal .colorpicker-hue {
+  background: linear-gradient(to left, #f00 0%, #ff8000 8%, #ff0 17%, #80ff00 25%, #0f0 33%, #00ff80 42%, #0ff 50%, #0080ff 58%, #00f 67%, #8000ff 75%, #f0f 83%, #ff0080 92%, #f00 100%);
+}
+.colorpicker-horizontal .colorpicker-hue,
+.colorpicker-horizontal .colorpicker-alpha {
+  width: 100%;
+  height: 25px;
+  cursor: col-resize;
+}
+.colorpicker-horizontal .colorpicker-hue .colorpicker-guide,
+.colorpicker-horizontal .colorpicker-alpha .colorpicker-guide {
+  width: 4px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.colorpicker-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.colorpicker-disabled .colorpicker-guide {
+  display: none;
+}
+
+.input-group-color {
+  width: 2rem;
+}
