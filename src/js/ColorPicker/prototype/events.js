@@ -8,27 +8,22 @@ Object.assign(ColorPicker.prototype, {
      * Attach events for the ColorPicker.
      */
     _events() {
-        if (this._settings.showOnFocus) {
-            dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
-                this.show();
-            });
-        }
-
-        dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
-            switch (e.code) {
-                case 'Enter':
-                    e.preventDefault();
-                    return this.toggle();
-                case 'Escape':
-                case 'Tab':
-                    return this.hide();
-                default:
-                    return;
-            }
+        dom.addEvent(this._menuNode, 'contextmenu.ui.datetimepicker', e => {
+            // prevent menu node from showing right click menu
+            e.preventDefault();
         });
 
-        dom.addEvent(this._container, 'click.ui.colorpicker mousedown.ui.colorpicker', e => {
+        dom.addEvent(this._menuNode, 'mousedown.ui.datetimepicker', e => {
+            if (this._settings.inline) {
+                return;
+            }
+
+            // prevent menu node from triggering blur event
             e.preventDefault();
+        });
+
+        dom.addEvent(this._container, 'click.ui.datetimepicker', e => {
+            // prevent menu node from closing modal
             e.stopPropagation();
         });
 
@@ -49,42 +44,8 @@ Object.assign(ColorPicker.prototype, {
             }
 
             this._updateSaturation(e.pageX, e.pageY);
-            dom.focus(this._saturationGuide);
         });
         dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
-
-        const getKeyPosition = e => {
-            const position = dom.center(e.target, true);
-
-            switch (e.key) {
-                case 'ArrowUp':
-                    position.y--;
-                    break;
-                case 'ArrowRight':
-                    position.x++;
-                    break;
-                case 'ArrowDown':
-                    position.y++;
-                    break;
-                case 'ArrowLeft':
-                    position.x--;
-                    break;
-                default:
-                    return null;
-            }
-
-            return position;
-        };
-
-        dom.addEvent(this._saturationGuide, 'keydown.ui.colorpicker', DOM.debounce(e => {
-            const position = getKeyPosition(e);
-
-            if (!position) {
-                return;
-            }
-
-            this._updateSaturation(position.x, position.y);
-        }));
 
         const hueEvent = dom.mouseDragFactory(
             e => {
@@ -103,19 +64,8 @@ Object.assign(ColorPicker.prototype, {
             }
 
             this._updateHue(e.pageX, e.pageY);
-            dom.focus(this._hueGuide);
         });
         dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
-
-        dom.addEvent(this._hueGuide, 'keydown.ui.colorpicker', DOM.debounce(e => {
-            const position = getKeyPosition(e);
-
-            if (!position) {
-                return;
-            }
-
-            this._updateHue(position.x, position.y);
-        }));
 
         if (this._settings.alpha) {
             const alphaEvent = dom.mouseDragFactory(
@@ -135,19 +85,8 @@ Object.assign(ColorPicker.prototype, {
                 }
 
                 this._updateAlpha(e.pageX, e.pageY);
-                dom.focus(this._alphaGuide);
             });
             dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
-
-            dom.addEvent(this._alphaGuide, 'keydown.ui.colorpicker', DOM.debounce(e => {
-                const position = getKeyPosition(e);
-
-                if (!position) {
-                    return;
-                }
-
-                this._updateAlpha(position.x, position.y);
-            }));
         }
 
         dom.addEvent(this._node, 'input.ui.color change.ui.color', _ => {
@@ -158,6 +97,44 @@ Object.assign(ColorPicker.prototype, {
                 this._setColor(color);
             }
         });
+
+        dom.addEvent(this._node, 'blur.ui.datetimepicker', _ => {
+            if (dom.isSame(this._node, document.activeElement)) {
+                return;
+            }
+
+            this.hide();
+        });
+
+        if (this._settings.showOnFocus) {
+            dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
+                if (!dom.isSame(this._node, document.activeElement)) {
+                    return;
+                }
+
+                this.show();
+            });
+        }
+
+        if (!this._settings.inline) {
+            dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
+                if (e.code !== 'Enter') {
+                    return;
+                }
+
+                e.preventDefault();
+                this.toggle();
+            });
+
+            dom.addEvent(this._node, 'keyup.ui.colorpicker', e => {
+                if (e.code !== 'Escape' || !dom.isConnected(this._menuNode)) {
+                    return;
+                }
+
+                e.stopPropagation();
+                this.hide();
+            });
+        }
     }
 
 });

@@ -4,6 +4,9 @@
 
 Object.assign(ColorPicker.prototype, {
 
+    /**
+     * Dispose a native ColorPicker.
+     */
     _disposeNative() {
         const id = dom.getAttribute(this._nativeInput, 'id');
 
@@ -17,6 +20,9 @@ Object.assign(ColorPicker.prototype, {
         super.dispose();
     },
 
+    /**
+     * Attach events for a native ColorPicker.
+     */
     _eventsNative() {
         dom.addEvent(this._nativeInput, 'change.ui.colorpicker', _ => {
             const value = dom.getValue(this._nativeInput);
@@ -27,6 +33,9 @@ Object.assign(ColorPicker.prototype, {
         });
     },
 
+    /**
+     * Render a native ColorPicker.
+     */
     _renderNative() {
         const attributes = { type: 'color' };
 

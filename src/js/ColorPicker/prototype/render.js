@@ -61,8 +61,6 @@ Object.assign(ColorPicker.prototype, {
             class: this.constructor.classes.menu
         });
 
-        this.constructor._triggers.set(this._menuNode, this._node);
-
         this._container = dom.create('div', {
             class: this.constructor.classes.container
         });
@@ -73,7 +71,7 @@ Object.assign(ColorPicker.prototype, {
         });
         dom.append(this._container, this._saturation);
 
-        this._saturationGuide = dom.create('button', {
+        this._saturationGuide = dom.create('div', {
             class: this.constructor.classes.guide
         });
         dom.append(this._saturation, this._saturationGuide);
@@ -83,7 +81,7 @@ Object.assign(ColorPicker.prototype, {
         });
         dom.append(this._container, this._hue);
 
-        this._hueGuide = dom.create('button', {
+        this._hueGuide = dom.create('div', {
             class: this.constructor.classes.guide
         });
         dom.append(this._hue, this._hueGuide);
@@ -99,7 +97,7 @@ Object.assign(ColorPicker.prototype, {
             });
             dom.append(this._alpha, this._alphaColor);
 
-            this._alphaGuide = dom.create('button', {
+            this._alphaGuide = dom.create('div', {
                 class: this.constructor.classes.guide
             });
             dom.append(this._alpha, this._alphaGuide);

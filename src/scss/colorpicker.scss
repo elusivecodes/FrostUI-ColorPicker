@@ -32,7 +32,6 @@
         border-radius: $colorpicker-saturation-guide-border-radius;
         box-shadow: $colorpicker-saturation-guide-box-shadow;
         transform: translate(-50%, -50%);
-        cursor: $colorpicker-saturation-cursor;
     }
 }
 
@@ -91,16 +90,6 @@
         background-color: $colorpicker-hue-alpha-guide-background-color;
         border: $colorpicker-hue-alpha-guide-border-size $border-style $colorpicker-hue-alpha-guide-border-color;
         transform: translateY(-50%);
-        cursor: $colorpicker-hue-alpha-cursor;
-    }
-}
-
-.colorpicker-guide {
-    padding: 0;
-    background-color: transparent;
-
-    &:focus {
-        outline: 0;
     }
 }
 

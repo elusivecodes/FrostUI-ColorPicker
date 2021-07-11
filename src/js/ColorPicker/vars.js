@@ -39,8 +39,6 @@ ColorPicker.classes = {
     spacingVertical: 'me-2'
 };
 
-ColorPicker._triggers = new WeakMap();
-
 UI.initComponent('colorpicker', ColorPicker);
 
 UI.ColorPicker = ColorPicker;
