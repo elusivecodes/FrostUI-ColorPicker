@@ -146,6 +146,7 @@
          * @returns {ColorPicker} The ColorPicker.
          */
         hide() {
+            console.log(this._animating);
             if (
                 this._settings.inline ||
                 this._animating ||
@@ -535,6 +536,8 @@
                 }
 
                 dom.stop(this._menuNode);
+                this._animating = false;
+
                 this.hide();
             });
 
@@ -544,6 +547,8 @@
                 }
 
                 dom.stop(this._menuNode);
+                this._animating = false;
+
                 this.show();
             });
 
@@ -554,7 +559,6 @@
 
                 e.preventDefault();
 
-                dom.stop(this._menuNode);
                 this.toggle();
             });
 
@@ -565,7 +569,6 @@
 
                 e.stopPropagation();
 
-                dom.stop(this._menuNode);
                 this.hide();
             });
         }

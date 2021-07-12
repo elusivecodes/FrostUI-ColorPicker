@@ -108,6 +108,8 @@ Object.assign(ColorPicker.prototype, {
             }
 
             dom.stop(this._menuNode);
+            this._animating = false;
+
             this.hide();
         });
 
@@ -117,6 +119,8 @@ Object.assign(ColorPicker.prototype, {
             }
 
             dom.stop(this._menuNode);
+            this._animating = false;
+
             this.show();
         });
 
@@ -127,7 +131,6 @@ Object.assign(ColorPicker.prototype, {
 
             e.preventDefault();
 
-            dom.stop(this._menuNode);
             this.toggle();
         });
 
@@ -138,7 +141,6 @@ Object.assign(ColorPicker.prototype, {
 
             e.stopPropagation();
 
-            dom.stop(this._menuNode);
             this.hide();
         });
     }

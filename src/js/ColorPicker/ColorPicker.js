@@ -113,6 +113,7 @@ class ColorPicker extends UI.BaseComponent {
      * @returns {ColorPicker} The ColorPicker.
      */
     hide() {
+        console.log(this._animating);
         if (
             this._settings.inline ||
             this._animating ||
