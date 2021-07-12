@@ -3,8 +3,6 @@ ColorPicker.defaults = {
     format: 'auto',
     defaultColor: null,
     alpha: true,
-    showOnFocus: true,
-    focusOnShow: true,
     inline: false,
     horizontal: false,
     keepInvalid: true,

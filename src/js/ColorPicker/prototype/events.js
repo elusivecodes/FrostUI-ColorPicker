@@ -98,43 +98,49 @@ Object.assign(ColorPicker.prototype, {
             }
         });
 
+        if (this._settings.inline) {
+            return;
+        }
+
         dom.addEvent(this._node, 'blur.ui.datetimepicker', _ => {
             if (dom.isSame(this._node, document.activeElement)) {
                 return;
             }
 
+            dom.stop(this._menuNode);
             this.hide();
         });
 
-        if (this._settings.showOnFocus) {
-            dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
-                if (!dom.isSame(this._node, document.activeElement)) {
-                    return;
-                }
+        dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
+            if (!dom.isSame(this._node, document.activeElement)) {
+                return;
+            }
 
-                this.show();
-            });
-        }
+            dom.stop(this._menuNode);
+            this.show();
+        });
 
-        if (!this._settings.inline) {
-            dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
-                if (e.code !== 'Enter') {
-                    return;
-                }
+        dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
+            if (e.code !== 'Enter') {
+                return;
+            }
 
-                e.preventDefault();
-                this.toggle();
-            });
+            e.preventDefault();
 
-            dom.addEvent(this._node, 'keyup.ui.colorpicker', e => {
-                if (e.code !== 'Escape' || !dom.isConnected(this._menuNode)) {
-                    return;
-                }
+            dom.stop(this._menuNode);
+            this.toggle();
+        });
 
-                e.stopPropagation();
-                this.hide();
-            });
-        }
+        dom.addEvent(this._node, 'keyup.ui.colorpicker', e => {
+            if (e.code !== 'Escape' || !dom.isConnected(this._menuNode)) {
+                return;
+            }
+
+            e.stopPropagation();
+
+            dom.stop(this._menuNode);
+            this.hide();
+        });
     }
 
 });

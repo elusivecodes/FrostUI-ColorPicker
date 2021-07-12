@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.0.2
+ * FrostUI-ColorPicker v1.1.0
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -198,10 +198,6 @@
                 duration: this._settings.duration
             }).then(_ => {
                 dom.triggerEvent(this._node, 'shown.ui.colorpicker');
-
-                if (this._settings.focusOnShow) {
-                    dom.focus(this._node);
-                }
             }).catch(_ => { }).finally(_ => {
                 this._animating = false;
             });
@@ -529,43 +525,49 @@
                 }
             });
 
+            if (this._settings.inline) {
+                return;
+            }
+
             dom.addEvent(this._node, 'blur.ui.datetimepicker', _ => {
                 if (dom.isSame(this._node, document.activeElement)) {
                     return;
                 }
 
+                dom.stop(this._menuNode);
                 this.hide();
             });
 
-            if (this._settings.showOnFocus) {
-                dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
-                    if (!dom.isSame(this._node, document.activeElement)) {
-                        return;
-                    }
+            dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
+                if (!dom.isSame(this._node, document.activeElement)) {
+                    return;
+                }
 
-                    this.show();
-                });
-            }
+                dom.stop(this._menuNode);
+                this.show();
+            });
 
-            if (!this._settings.inline) {
-                dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
-                    if (e.code !== 'Enter') {
-                        return;
-                    }
+            dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
+                if (e.code !== 'Enter') {
+                    return;
+                }
 
-                    e.preventDefault();
-                    this.toggle();
-                });
+                e.preventDefault();
 
-                dom.addEvent(this._node, 'keyup.ui.colorpicker', e => {
-                    if (e.code !== 'Escape' || !dom.isConnected(this._menuNode)) {
-                        return;
-                    }
+                dom.stop(this._menuNode);
+                this.toggle();
+            });
 
-                    e.stopPropagation();
-                    this.hide();
-                });
-            }
+            dom.addEvent(this._node, 'keyup.ui.colorpicker', e => {
+                if (e.code !== 'Escape' || !dom.isConnected(this._menuNode)) {
+                    return;
+                }
+
+                e.stopPropagation();
+
+                dom.stop(this._menuNode);
+                this.hide();
+            });
         }
 
     });
@@ -673,12 +675,14 @@
             }
 
             dom.triggerEvent(this._node, 'change.ui.colorpicker', {
-                old: this._color ?
-                    this._color.clone() :
-                    null,
-                new: color ?
-                    color.clone() :
-                    null
+                detail: {
+                    old: this._color ?
+                        this._color.clone() :
+                        null,
+                    new: color ?
+                        color.clone() :
+                        null
+                }
             });
 
             this._validColor = true;
@@ -1009,8 +1013,6 @@
         format: 'auto',
         defaultColor: null,
         alpha: true,
-        showOnFocus: true,
-        focusOnShow: true,
         inline: false,
         horizontal: false,
         keepInvalid: true,

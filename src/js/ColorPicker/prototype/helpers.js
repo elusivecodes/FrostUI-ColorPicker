@@ -100,12 +100,14 @@ Object.assign(ColorPicker.prototype, {
         }
 
         dom.triggerEvent(this._node, 'change.ui.colorpicker', {
-            old: this._color ?
-                this._color.clone() :
-                null,
-            new: color ?
-                color.clone() :
-                null
+            detail: {
+                old: this._color ?
+                    this._color.clone() :
+                    null,
+                new: color ?
+                    color.clone() :
+                    null
+            }
         });
 
         this._validColor = true;
