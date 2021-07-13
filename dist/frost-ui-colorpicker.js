@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.1
+ * FrostUI-ColorPicker v1.1.2
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -436,12 +436,12 @@
          * Attach events for the ColorPicker.
          */
         _events() {
-            dom.addEvent(this._menuNode, 'contextmenu.ui.datetimepicker', e => {
+            dom.addEvent(this._menuNode, 'contextmenu.ui.colorpicker', e => {
                 // prevent menu node from showing right click menu
                 e.preventDefault();
             });
 
-            dom.addEvent(this._menuNode, 'mousedown.ui.datetimepicker', e => {
+            dom.addEvent(this._menuNode, 'mousedown.ui.colorpicker', e => {
                 if (this._settings.inline) {
                     return;
                 }
@@ -450,7 +450,7 @@
                 e.preventDefault();
             });
 
-            dom.addEvent(this._container, 'click.ui.datetimepicker', e => {
+            dom.addEvent(this._container, 'click.ui.colorpicker', e => {
                 // prevent menu node from closing modal
                 e.stopPropagation();
             });
@@ -530,7 +530,7 @@
                 return;
             }
 
-            dom.addEvent(this._node, 'blur.ui.datetimepicker', _ => {
+            dom.addEvent(this._node, 'blur.ui.colorpicker', _ => {
                 if (dom.isSame(this._node, document.activeElement)) {
                     return;
                 }
