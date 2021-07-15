@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.2
+ * FrostUI-ColorPicker v1.1.3
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -673,7 +673,7 @@
          * @param {Boolean} updateAttributes Whether to update the attributes.
          */
         _setColor(color, updateAttributes = true) {
-            if (!this._isEditable()) {
+            if (!this._isEditable() || `${color}` === `${this._color}`) {
                 return;
             }
 

@@ -95,7 +95,7 @@ Object.assign(ColorPicker.prototype, {
      * @param {Boolean} updateAttributes Whether to update the attributes.
      */
     _setColor(color, updateAttributes = true) {
-        if (!this._isEditable()) {
+        if (!this._isEditable() || `${color}` === `${this._color}`) {
             return;
         }
 
