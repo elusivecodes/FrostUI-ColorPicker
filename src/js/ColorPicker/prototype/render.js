@@ -135,18 +135,6 @@ Object.assign(ColorPicker.prototype, {
         } else {
             dom.addClass(this._menuNode, this.constructor.classes.menuPadding);
             dom.addClass(this._menuNode, this.constructor.classes.menuShadow);
-
-            this._popper = new UI.Popper(
-                this._menuNode,
-                {
-                    reference: this._node,
-                    placement: this._settings.placement,
-                    position: this._settings.position,
-                    fixed: this._settings.fixed,
-                    spacing: this._settings.spacing,
-                    minContact: this._settings.minContact
-                }
-            );
         }
     }
 

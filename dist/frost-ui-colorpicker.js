@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.3
+ * FrostUI-ColorPicker v1.1.4
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -146,7 +146,6 @@
          * @returns {ColorPicker} The ColorPicker.
          */
         hide() {
-            console.log(this._animating);
             if (
                 this._settings.inline ||
                 this._animating ||
@@ -161,6 +160,9 @@
             dom.fadeOut(this._menuNode, {
                 duration: this._settings.duration
             }).then(_ => {
+                this._popper.dispose();
+                this._popper = null;
+
                 dom.detach(this._menuNode);
                 dom.triggerEvent(this._node, 'hidden.ui.colorpicker');
             }).catch(_ => { }).finally(_ => {
@@ -193,7 +195,17 @@
                 dom.after(this._node, this._menuNode);
             }
 
-            this.update();
+            this._popper = new UI.Popper(
+                this._menuNode,
+                {
+                    reference: this._node,
+                    placement: this._settings.placement,
+                    position: this._settings.position,
+                    fixed: this._settings.fixed,
+                    spacing: this._settings.spacing,
+                    minContact: this._settings.minContact
+                }
+            );
 
             dom.fadeIn(this._menuNode, {
                 duration: this._settings.duration
@@ -221,7 +233,7 @@
          * @returns {ColorPicker} The ColorPicker.
          */
         update() {
-            if (!this._settings.inline) {
+            if (this._popper) {
                 this._popper.update();
             }
 
@@ -993,18 +1005,6 @@
             } else {
                 dom.addClass(this._menuNode, this.constructor.classes.menuPadding);
                 dom.addClass(this._menuNode, this.constructor.classes.menuShadow);
-
-                this._popper = new UI.Popper(
-                    this._menuNode,
-                    {
-                        reference: this._node,
-                        placement: this._settings.placement,
-                        position: this._settings.position,
-                        fixed: this._settings.fixed,
-                        spacing: this._settings.spacing,
-                        minContact: this._settings.minContact
-                    }
-                );
             }
         }
 
