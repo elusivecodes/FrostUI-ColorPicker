@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.5
+ * FrostUI-ColorPicker v1.1.6
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -109,10 +109,12 @@
                 this._popper = null;
             }
 
-            dom.removeEvent(this._node, 'focus.ui.colorpicker');
-            dom.removeEvent(this._node, 'keydown.ui.colorpicker');
             dom.removeEvent(this._node, 'input.ui.color');
             dom.removeEvent(this._node, 'change.ui.color');
+            dom.removeEvent(this._node, 'blur.ui.colorpicker');
+            dom.removeEvent(this._node, 'focus.ui.colorpicker');
+            dom.removeEvent(this._node, 'keydown.ui.colorpicker');
+            dom.removeEvent(this._node, 'keyup.ui.colorpicker');
             dom.remove(this._menuNode);
 
             this._menuNode = null;

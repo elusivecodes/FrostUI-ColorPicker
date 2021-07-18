@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrostUI ColorPicker Methods</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui/dist/frost-ui.css">
+    <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor/dist/frost-color.js"></script>
+    <script src="../dist/frost-ui-colorpicker.js"></script>
+</head>
+
+<body>
+    <div class="container pt-5">
+        <div class="mb-4">
+            <label for="colorDispose">Default</label>
+            <div class="form-input">
+                <input class="input-filled" id="colorDispose" type="text" placeholder="Placeholder" autocomplete="off" />
+                <div class="ripple-line"></div>
+            </div>
+            <div class="mt-1">
+                <button class="btn btn-danger ripple mb-0" id="colorDisposeBtn" type="button">Dispose</button>
+                <button class="btn btn-primary ripple mb-0" id="colorInitBtn" type="button">Init</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const colorDispose = dom.findOne('#colorDispose');
+        const colorDisposeBtn = dom.findOne('#colorDisposeBtn');
+        const colorInitBtn = dom.findOne('#colorInitBtn');
+
+        UI.ColorPicker.init(colorDispose);
+
+        dom.addEvent(colorDisposeBtn, 'click', e => {
+            UI.ColorPicker.init(colorDispose).dispose();
+        });
+
+        dom.addEvent(colorInitBtn, 'click', e => {
+            UI.ColorPicker.init(colorDispose);
+        });
+    </script>
+</body>
+
+</html>
