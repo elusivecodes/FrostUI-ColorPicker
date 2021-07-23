@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.6
+ * FrostUI-ColorPicker v1.2.0
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {

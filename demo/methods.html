@@ -15,31 +15,67 @@
 <body>
     <div class="container pt-5">
         <div class="mb-4">
-            <label for="colorDispose">Default</label>
-            <div class="form-input">
-                <input class="input-filled" id="colorDispose" type="text" placeholder="Placeholder" autocomplete="off" />
-                <div class="ripple-line"></div>
+            <label for="colorDefault">Default</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" id="colorDefault" type="text" value="#228c22" placeholder="Placeholder" autocomplete="off" />
+                    <div class="ripple-line"></div>
+                </div>
+                <label class="input-group-text input-group-color" for="colorDefault"></label>
             </div>
             <div class="mt-1">
-                <button class="btn btn-danger ripple mb-0" id="colorDisposeBtn" type="button">Dispose</button>
-                <button class="btn btn-primary ripple mb-0" id="colorInitBtn" type="button">Init</button>
+                <div class="btn-group">
+                    <button class="btn btn-primary ripple mb-0" id="colorInit" type="button">Init</button>
+                    <button class="btn btn-danger ripple mb-0" id="colorDispose" type="button">Dispose</button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-success ripple mb-0" id="colorEnable" type="button">Enable</button>
+                    <button class="btn btn-warning ripple mb-0" id="colorDisable" type="button">Disable</button>
+                </div>
             </div>
+            <div class="mt-1">
+                <button class="btn btn-secondary ripple mb-0" id="colorGetColor" type="button">Get Color</button>
+                <button class="btn btn-secondary ripple mb-0" id="colorSetColor" type="button">Set Color (#fff)</button>
+            </div>
+            <samp id="output"></samp>
         </div>
     </div>
     <script>
+        const colorDefault = dom.findOne('#colorDefault');
+        const colorInit = dom.findOne('#colorInit');
         const colorDispose = dom.findOne('#colorDispose');
-        const colorDisposeBtn = dom.findOne('#colorDisposeBtn');
-        const colorInitBtn = dom.findOne('#colorInitBtn');
+        const colorEnable = dom.findOne('#colorEnable');
+        const colorDisable = dom.findOne('#colorDisable');
+        const colorGetColor = dom.findOne('#colorGetColor');
+        const colorSetColor = dom.findOne('#colorSetColor');
+        const output = dom.findOne('#output');
 
-        UI.ColorPicker.init(colorDispose);
-
-        dom.addEvent(colorDisposeBtn, 'click', e => {
-            UI.ColorPicker.init(colorDispose).dispose();
+        dom.addEvent(colorInit, 'click', e => {
+            UI.ColorPicker.init(colorDefault);
         });
 
-        dom.addEvent(colorInitBtn, 'click', e => {
-            UI.ColorPicker.init(colorDispose);
+        dom.addEvent(colorDispose, 'click', e => {
+            UI.ColorPicker.init(colorDefault).dispose();
         });
+
+        dom.addEvent(colorEnable, 'click', e => {
+            UI.ColorPicker.init(colorDefault).enable();
+        });
+
+        dom.addEvent(colorDisable, 'click', e => {
+            UI.ColorPicker.init(colorDefault).disable();
+        });
+
+        dom.addEvent(colorGetColor, 'click', e => {
+            const color = UI.ColorPicker.init(colorDefault).getColor();
+            dom.setText(output, `Color: ${color}`);
+        });
+
+        dom.addEvent(colorSetColor, 'click', e => {
+            UI.ColorPicker.init(colorDefault).setColor('#fff');
+        });
+
+        dom.triggerEvent(colorInit, 'click');
     </script>
 </body>
 

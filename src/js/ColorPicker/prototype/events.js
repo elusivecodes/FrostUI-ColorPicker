@@ -13,20 +13,6 @@ Object.assign(ColorPicker.prototype, {
             e.preventDefault();
         });
 
-        dom.addEvent(this._menuNode, 'mousedown.ui.colorpicker', e => {
-            if (this._settings.inline) {
-                return;
-            }
-
-            // prevent menu node from triggering blur event
-            e.preventDefault();
-        });
-
-        dom.addEvent(this._container, 'click.ui.colorpicker', e => {
-            // prevent menu node from closing modal
-            e.stopPropagation();
-        });
-
         const saturationEvent = dom.mouseDragFactory(
             e => {
                 if (e.button) {
@@ -45,6 +31,7 @@ Object.assign(ColorPicker.prototype, {
 
             this._updateSaturation(e.pageX, e.pageY);
         });
+
         dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
 
         const hueEvent = dom.mouseDragFactory(
@@ -65,6 +52,7 @@ Object.assign(ColorPicker.prototype, {
 
             this._updateHue(e.pageX, e.pageY);
         });
+
         dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
 
         if (this._settings.alpha) {
@@ -86,10 +74,15 @@ Object.assign(ColorPicker.prototype, {
 
                 this._updateAlpha(e.pageX, e.pageY);
             });
+
             dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
         }
 
-        dom.addEvent(this._node, 'input.ui.color change.ui.color', _ => {
+        dom.addEvent(this._node, 'change.ui.colorpicker', _ => {
+            if (this._noChange) {
+                return;
+            }
+
             const value = dom.getValue(this._node);
             const color = this._parseColor(value);
 
@@ -102,15 +95,14 @@ Object.assign(ColorPicker.prototype, {
             return;
         }
 
-        dom.addEvent(this._node, 'blur.ui.colorpicker', _ => {
-            if (dom.isSame(this._node, document.activeElement)) {
-                return;
-            }
+        dom.addEvent(this._menuNode, 'click.ui.colorpicker', e => {
+            // prevent menu node from closing modal
+            e.stopPropagation();
+        });
 
-            dom.stop(this._menuNode);
-            this._animating = false;
-
-            this.hide();
+        dom.addEvent(this._menuNode, 'mousedown.ui.colorpicker', e => {
+            // prevent menu node from triggering blur event
+            e.preventDefault();
         });
 
         dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
@@ -122,6 +114,17 @@ Object.assign(ColorPicker.prototype, {
             this._animating = false;
 
             this.show();
+        });
+
+        dom.addEvent(this._node, 'blur.ui.colorpicker', _ => {
+            if (dom.isSame(this._node, document.activeElement)) {
+                return;
+            }
+
+            dom.stop(this._menuNode);
+            this._animating = false;
+
+            this.hide();
         });
 
         dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
@@ -139,6 +142,7 @@ Object.assign(ColorPicker.prototype, {
                 return;
             }
 
+            // prevent node from closing modal
             e.stopPropagation();
 
             this.hide();

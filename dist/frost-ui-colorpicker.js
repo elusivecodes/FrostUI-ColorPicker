@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.1.6
+ * FrostUI-ColorPicker v1.2.0
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -128,6 +128,8 @@
             this._alphaGuide = null;
             this._preview = null;
             this._previewColor = null;
+            this._values = null;
+            this._dateOptions = null;
 
             super.dispose();
         }
@@ -141,6 +143,14 @@
             this._refreshDisabled();
 
             return this;
+        }
+
+        /**
+         * Get the current color.
+         * @returns {Color} The current color.
+         */
+        getColor() {
+            return this._color.clone();
         }
 
         /**
@@ -170,6 +180,23 @@
             }).catch(_ => { }).finally(_ => {
                 this._animating = false;
             });
+
+            return this;
+        }
+
+        /**
+         * Set the current color.
+         * @param {string|Color} date The input color.
+         * @returns {ColorPicker} The ColorPicker object.
+         */
+        setColor(color) {
+            color = this._parseColor(color);
+
+            if (!this._settings.alpha) {
+                color = color.setAlpha(1);
+            }
+
+            this._setColor(color);
 
             return this;
         }
@@ -246,201 +273,6 @@
 
 
     /**
-     * ColorPicker API
-     */
-
-    Object.assign(ColorPicker.prototype, {
-
-        /**
-         * Darken the color by a specified amount.
-         * @param {number} amount The amount to darken the color by. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        darken(amount) {
-            const color = this.getColor().darken(amount);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Get the alpha value of the color.
-         * @returns {number} The alpha value. (0, 1)
-         */
-        getAlpha() {
-            return this._color.getAlpha();
-        },
-
-        /**
-         * Get the brightness value of the color.
-         * @returns {number} The brightness value. (0, 100)
-         */
-        getBrightness() {
-            return this._color.getBrightness();
-        },
-
-        /**
-         * Get the current color.
-         * @returns {Color} The current color.
-         */
-        getColor() {
-            return this._color.clone();
-        },
-
-        /**
-         * Get the hue value of the color.
-         * @returns {number} The hue value. (0, 360)
-         */
-        getHue() {
-            return this._color.getHue();
-        },
-
-        /**
-         * Get the saturation value of the color.
-         * @returns {number} The saturation value. (0, 100)
-         */
-        getSaturation() {
-            return this._color.getSaturation();
-        },
-
-        /**
-         * Invert the color.
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        invert() {
-            const color = this.getColor().invert();
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Lighten the color by a specified amount.
-         * @param {number} amount The amount to lighten the color by. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        lighten(amount) {
-            const color = this.getColor().lighten(amount);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Get the relative luminance value of the color 
-         * @returns {number} The relative luminance value. (0, 1)
-         */
-        luma() {
-            return this._color.luma();
-        },
-
-        /**
-         * Set the alpha value of the color.
-         * @param {number} a The alpha value. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        setAlpha(a) {
-            if (this._settings.alpha) {
-                const color = this.getColor().setAlpha(a);
-                this._setColor(color);
-            }
-
-            return this;
-        },
-
-        /**
-         * Set the brightness value of the color.
-         * @param {number} v The brightness value. (0, 100)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        setBrightness(v) {
-            const color = this.getColor().setBrightness(v);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Set the current color.
-         * @param {string|Color} date The input color.
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        setColor(color) {
-            color = this._parseColor(color);
-
-            if (!this._settings.alpha) {
-                color = color.setAlpha(1);
-            }
-
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Set the hue value of the color.
-         * @param {number} h The hue value. (0, 360)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        setHue(h) {
-            const color = this.getColor().setHue(h);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Set the saturation value of the color.
-         * @param {number} s The saturation value. (0, 100)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        setSaturation(s) {
-            const color = this.getColor()._setColor(s);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Shade the color by a specified amount.
-         * @param {number} amount The amount to shade the color by. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        shade(amount) {
-            const color = this.getColor().shade(amount);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Tint the color by a specified amount.
-         * @param {number} amount The amount to tint the color by. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        tint(amount) {
-            const color = this.getColor().tint(amount);
-            this._setColor(color);
-
-            return this;
-        },
-
-        /**
-         * Tone the color by a specified amount.
-         * @param {number} amount The amount to tone the color by. (0, 1)
-         * @returns {ColorPicker} The ColorPicker object.
-         */
-        tone(amount) {
-            const color = this.getColor().tone(amount);
-            this._setColor(color);
-
-            return this;
-        }
-
-    });
-
-
-    /**
      * ColorPicker Events
      */
 
@@ -453,20 +285,6 @@
             dom.addEvent(this._menuNode, 'contextmenu.ui.colorpicker', e => {
                 // prevent menu node from showing right click menu
                 e.preventDefault();
-            });
-
-            dom.addEvent(this._menuNode, 'mousedown.ui.colorpicker', e => {
-                if (this._settings.inline) {
-                    return;
-                }
-
-                // prevent menu node from triggering blur event
-                e.preventDefault();
-            });
-
-            dom.addEvent(this._container, 'click.ui.colorpicker', e => {
-                // prevent menu node from closing modal
-                e.stopPropagation();
             });
 
             const saturationEvent = dom.mouseDragFactory(
@@ -487,6 +305,7 @@
 
                 this._updateSaturation(e.pageX, e.pageY);
             });
+
             dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
 
             const hueEvent = dom.mouseDragFactory(
@@ -507,6 +326,7 @@
 
                 this._updateHue(e.pageX, e.pageY);
             });
+
             dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
 
             if (this._settings.alpha) {
@@ -528,10 +348,15 @@
 
                     this._updateAlpha(e.pageX, e.pageY);
                 });
+
                 dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
             }
 
-            dom.addEvent(this._node, 'input.ui.color change.ui.color', _ => {
+            dom.addEvent(this._node, 'change.ui.colorpicker', _ => {
+                if (this._noChange) {
+                    return;
+                }
+
                 const value = dom.getValue(this._node);
                 const color = this._parseColor(value);
 
@@ -544,15 +369,14 @@
                 return;
             }
 
-            dom.addEvent(this._node, 'blur.ui.colorpicker', _ => {
-                if (dom.isSame(this._node, document.activeElement)) {
-                    return;
-                }
+            dom.addEvent(this._menuNode, 'click.ui.colorpicker', e => {
+                // prevent menu node from closing modal
+                e.stopPropagation();
+            });
 
-                dom.stop(this._menuNode);
-                this._animating = false;
-
-                this.hide();
+            dom.addEvent(this._menuNode, 'mousedown.ui.colorpicker', e => {
+                // prevent menu node from triggering blur event
+                e.preventDefault();
             });
 
             dom.addEvent(this._node, 'focus.ui.colorpicker', _ => {
@@ -564,6 +388,17 @@
                 this._animating = false;
 
                 this.show();
+            });
+
+            dom.addEvent(this._node, 'blur.ui.colorpicker', _ => {
+                if (dom.isSame(this._node, document.activeElement)) {
+                    return;
+                }
+
+                dom.stop(this._menuNode);
+                this._animating = false;
+
+                this.hide();
             });
 
             dom.addEvent(this._node, 'keydown.ui.colorpicker', e => {
@@ -581,6 +416,7 @@
                     return;
                 }
 
+                // prevent node from closing modal
                 e.stopPropagation();
 
                 this.hide();
@@ -684,12 +520,19 @@
         /**
          * Set the current color.
          * @param {Color} color The new color.
-         * @param {Boolean} updateAttributes Whether to update the attributes.
+         * @param {Boolean} [updateAttributes=true] Whether to update the attributes.
          */
         _setColor(color, updateAttributes = true) {
-            if (!this._isEditable() || `${color}` === `${this._color}`) {
+            if (!this._isEditable()) {
                 return;
             }
+
+            if (`${color}` === `${this._color}`) {
+                this._refresh();
+                return;
+            }
+
+            this._noChange = true;
 
             dom.triggerEvent(this._node, 'change.ui.colorpicker', {
                 detail: {
@@ -702,6 +545,7 @@
                 }
             });
 
+            this._noChange = false;
             this._validColor = true;
             this._color = color;
 

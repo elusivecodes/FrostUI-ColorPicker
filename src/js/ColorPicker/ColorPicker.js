@@ -95,6 +95,8 @@ class ColorPicker extends UI.BaseComponent {
         this._alphaGuide = null;
         this._preview = null;
         this._previewColor = null;
+        this._values = null;
+        this._dateOptions = null;
 
         super.dispose();
     }
@@ -108,6 +110,14 @@ class ColorPicker extends UI.BaseComponent {
         this._refreshDisabled();
 
         return this;
+    }
+
+    /**
+     * Get the current color.
+     * @returns {Color} The current color.
+     */
+    getColor() {
+        return this._color.clone();
     }
 
     /**
@@ -137,6 +147,23 @@ class ColorPicker extends UI.BaseComponent {
         }).catch(_ => { }).finally(_ => {
             this._animating = false;
         });
+
+        return this;
+    }
+
+    /**
+     * Set the current color.
+     * @param {string|Color} date The input color.
+     * @returns {ColorPicker} The ColorPicker object.
+     */
+    setColor(color) {
+        color = this._parseColor(color);
+
+        if (!this._settings.alpha) {
+            color = color.setAlpha(1);
+        }
+
+        this._setColor(color);
 
         return this;
     }

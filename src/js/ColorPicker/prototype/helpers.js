@@ -92,12 +92,19 @@ Object.assign(ColorPicker.prototype, {
     /**
      * Set the current color.
      * @param {Color} color The new color.
-     * @param {Boolean} updateAttributes Whether to update the attributes.
+     * @param {Boolean} [updateAttributes=true] Whether to update the attributes.
      */
     _setColor(color, updateAttributes = true) {
-        if (!this._isEditable() || `${color}` === `${this._color}`) {
+        if (!this._isEditable()) {
             return;
         }
+
+        if (`${color}` === `${this._color}`) {
+            this._refresh();
+            return;
+        }
+
+        this._noChange = true;
 
         dom.triggerEvent(this._node, 'change.ui.colorpicker', {
             detail: {
@@ -110,6 +117,7 @@ Object.assign(ColorPicker.prototype, {
             }
         });
 
+        this._noChange = false;
         this._validColor = true;
         this._color = color;
 
