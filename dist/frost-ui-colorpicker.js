@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.2.0
+ * FrostUI-ColorPicker v1.2.1
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -421,6 +421,18 @@
 
                 this.hide();
             });
+
+            if (this._inputGroupColor) {
+                dom.addEvent(this._inputGroupColor, 'mousedown.ui.colorpicker', e => {
+                    // prevent group color addon from triggering blur event
+                    e.preventDefault();
+                });
+
+                dom.addEvent(this._inputGroupColor, 'click.ui.colorpicker', _ => {
+                    dom.focus(this._node);
+                    this.toggle();
+                });
+            }
         }
 
     });
