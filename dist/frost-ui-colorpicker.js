@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.2.1
+ * FrostUI-ColorPicker v1.2.2
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -294,7 +294,8 @@
                     }
                 },
                 e => {
-                    this._updateSaturation(e.pageX, e.pageY);
+                    const pos = UI.getPosition(e);
+                    this._updateSaturation(pos.x, pos.y);
                 }
             );
 
@@ -303,7 +304,8 @@
                     return false;
                 }
 
-                this._updateSaturation(e.pageX, e.pageY);
+                const pos = UI.getPosition(e);
+                this._updateSaturation(pos.x, pos.y);
             });
 
             dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
@@ -315,7 +317,8 @@
                     }
                 },
                 e => {
-                    this._updateHue(e.pageX, e.pageY);
+                    const pos = UI.getPosition(e);
+                    this._updateHue(pos.x, pos.y);
                 }
             );
 
@@ -324,7 +327,8 @@
                     return false;
                 }
 
-                this._updateHue(e.pageX, e.pageY);
+                const pos = UI.getPosition(e);
+                this._updateHue(pos.x, pos.y);
             });
 
             dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
@@ -337,7 +341,8 @@
                         }
                     },
                     e => {
-                        this._updateAlpha(e.pageX, e.pageY);
+                        const pos = UI.getPosition(e);
+                        this._updateAlpha(pos.x, pos.y);
                     }
                 );
 
@@ -346,7 +351,8 @@
                         return false;
                     }
 
-                    this._updateAlpha(e.pageX, e.pageY);
+                    const pos = UI.getPosition(e);
+                    this._updateAlpha(pos.x, pos.y);
                 });
 
                 dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);

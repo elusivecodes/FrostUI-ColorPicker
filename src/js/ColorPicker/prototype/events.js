@@ -20,7 +20,8 @@ Object.assign(ColorPicker.prototype, {
                 }
             },
             e => {
-                this._updateSaturation(e.pageX, e.pageY);
+                const pos = UI.getPosition(e);
+                this._updateSaturation(pos.x, pos.y);
             }
         );
 
@@ -29,7 +30,8 @@ Object.assign(ColorPicker.prototype, {
                 return false;
             }
 
-            this._updateSaturation(e.pageX, e.pageY);
+            const pos = UI.getPosition(e);
+            this._updateSaturation(pos.x, pos.y);
         });
 
         dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
@@ -41,7 +43,8 @@ Object.assign(ColorPicker.prototype, {
                 }
             },
             e => {
-                this._updateHue(e.pageX, e.pageY);
+                const pos = UI.getPosition(e);
+                this._updateHue(pos.x, pos.y);
             }
         );
 
@@ -50,7 +53,8 @@ Object.assign(ColorPicker.prototype, {
                 return false;
             }
 
-            this._updateHue(e.pageX, e.pageY);
+            const pos = UI.getPosition(e);
+            this._updateHue(pos.x, pos.y);
         });
 
         dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
@@ -63,7 +67,8 @@ Object.assign(ColorPicker.prototype, {
                     }
                 },
                 e => {
-                    this._updateAlpha(e.pageX, e.pageY);
+                    const pos = UI.getPosition(e);
+                    this._updateAlpha(pos.x, pos.y);
                 }
             );
 
@@ -72,7 +77,8 @@ Object.assign(ColorPicker.prototype, {
                     return false;
                 }
 
-                this._updateAlpha(e.pageX, e.pageY);
+                const pos = UI.getPosition(e);
+                this._updateAlpha(pos.x, pos.y);
             });
 
             dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
