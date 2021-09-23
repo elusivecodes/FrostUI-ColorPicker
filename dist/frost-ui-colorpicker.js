@@ -1,5 +1,5 @@
 /**
- * FrostUI-ColorPicker v1.2.2
+ * FrostUI-ColorPicker v1.2.3
  * https://github.com/elusivecodes/FrostUI-ColorPicker
  */
 (function(global, factory) {
@@ -308,7 +308,7 @@
                 this._updateSaturation(pos.x, pos.y);
             });
 
-            dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
+            dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent, { passive: true });
 
             const hueEvent = dom.mouseDragFactory(
                 e => {
@@ -331,7 +331,7 @@
                 this._updateHue(pos.x, pos.y);
             });
 
-            dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
+            dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent, { passive: true });
 
             if (this._settings.alpha) {
                 const alphaEvent = dom.mouseDragFactory(
@@ -355,7 +355,7 @@
                     this._updateAlpha(pos.x, pos.y);
                 });
 
-                dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
+                dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent, { passive: true });
             }
 
             dom.addEvent(this._node, 'change.ui.colorpicker', _ => {

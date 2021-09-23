@@ -34,7 +34,7 @@ Object.assign(ColorPicker.prototype, {
             this._updateSaturation(pos.x, pos.y);
         });
 
-        dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent);
+        dom.addEvent(this._saturation, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', saturationEvent, { passive: true });
 
         const hueEvent = dom.mouseDragFactory(
             e => {
@@ -57,7 +57,7 @@ Object.assign(ColorPicker.prototype, {
             this._updateHue(pos.x, pos.y);
         });
 
-        dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent);
+        dom.addEvent(this._hue, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', hueEvent, { passive: true });
 
         if (this._settings.alpha) {
             const alphaEvent = dom.mouseDragFactory(
@@ -81,7 +81,7 @@ Object.assign(ColorPicker.prototype, {
                 this._updateAlpha(pos.x, pos.y);
             });
 
-            dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent);
+            dom.addEvent(this._alpha, 'mousedown.ui.colorpicker touchstart.ui.colorpicker', alphaEvent, { passive: true });
         }
 
         dom.addEvent(this._node, 'change.ui.colorpicker', _ => {
