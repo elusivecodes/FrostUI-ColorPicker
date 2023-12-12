@@ -137,15 +137,23 @@
                 this._modal = null;
             }
 
-            $.removeEvent(this._node, 'change.ui.color');
+            $.removeEvent(this._node, 'change.ui.colorpicker');
             $.removeEvent(this._node, 'click.ui.colorpicker');
             $.removeEvent(this._node, 'focus.ui.colorpicker');
             $.removeEvent(this._node, 'blur.ui.colorpicker');
             $.removeEvent(this._node, 'keydown.ui.colorpicker');
             $.removeEvent(this._node, 'keyup.ui.colorpicker');
+
+            if (this._inputGroupColor) {
+                $.removeEvent(this._inputGroupColor, 'mousedown.ui.colorpicker');
+                $.removeEvent(this._inputGroupColor, 'click.ui.colorpicker');
+            }
+
             $.remove(this._menuNode);
 
             this._color = null;
+            this._defaultColor = null;
+            this._inputGroupColor = null;
             this._menuNode = null;
             this._container = null;
             this._saturation = null;
