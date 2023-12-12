@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrostUI ColorPicker Methods</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui.css">
     <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@3.0/dist/frost-color.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@latest/dist/frost-color.js"></script>
     <script src="../dist/frost-ui-colorpicker.js"></script>
 </head>
 
@@ -41,41 +41,41 @@
         </div>
     </div>
     <script>
-        const colorDefault = dom.findOne('#colorDefault');
-        const colorInit = dom.findOne('#colorInit');
-        const colorDispose = dom.findOne('#colorDispose');
-        const colorEnable = dom.findOne('#colorEnable');
-        const colorDisable = dom.findOne('#colorDisable');
-        const colorGetColor = dom.findOne('#colorGetColor');
-        const colorSetColor = dom.findOne('#colorSetColor');
-        const output = dom.findOne('#output');
+        const colorDefault = $.findOne('#colorDefault');
+        const colorInit = $.findOne('#colorInit');
+        const colorDispose = $.findOne('#colorDispose');
+        const colorEnable = $.findOne('#colorEnable');
+        const colorDisable = $.findOne('#colorDisable');
+        const colorGetColor = $.findOne('#colorGetColor');
+        const colorSetColor = $.findOne('#colorSetColor');
+        const output = $.findOne('#output');
 
-        dom.addEvent(colorInit, 'click', e => {
+        $.addEvent(colorInit, 'click', e => {
             UI.ColorPicker.init(colorDefault);
         });
 
-        dom.addEvent(colorDispose, 'click', e => {
+        $.addEvent(colorDispose, 'click', e => {
             UI.ColorPicker.init(colorDefault).dispose();
         });
 
-        dom.addEvent(colorEnable, 'click', e => {
+        $.addEvent(colorEnable, 'click', e => {
             UI.ColorPicker.init(colorDefault).enable();
         });
 
-        dom.addEvent(colorDisable, 'click', e => {
+        $.addEvent(colorDisable, 'click', e => {
             UI.ColorPicker.init(colorDefault).disable();
         });
 
-        dom.addEvent(colorGetColor, 'click', e => {
+        $.addEvent(colorGetColor, 'click', e => {
             const color = UI.ColorPicker.init(colorDefault).getColor();
-            dom.setText(output, `Color: ${color}`);
+            $.setText(output, `Color: ${color}`);
         });
 
-        dom.addEvent(colorSetColor, 'click', e => {
+        $.addEvent(colorSetColor, 'click', e => {
             UI.ColorPicker.init(colorDefault).setColor('#fff');
         });
 
-        dom.triggerEvent(colorInit, 'click');
+        $.triggerEvent(colorInit, 'click');
     </script>
 </body>
 

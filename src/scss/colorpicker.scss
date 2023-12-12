@@ -1,14 +1,18 @@
-@import "functions";
 @import "vars";
 
 .colorpicker {
-    z-index: $dropdown-z-index;
+    --colorpicker-z-index: #{$colorpicker-z-index};
+    --colorpicker-bg: #{$colorpicker-bg};
+    --colorpicker-border-width: #{$colorpicker-border-width};
+    --colorpicker-border-color: #{$colorpicker-border-color};
+
+    z-index: var(--colorpicker-z-index);
     display: block;
     padding: 0;
     margin: 0;
     user-select: none;
-    background-color: $colorpicker-background-color;
-    border: $colorpicker-border-size $border-style $colorpicker-border-color;
+    background-color: var(--colorpicker-bg);
+    border: var(--colorpicker-border-width) var(--ui-border-style) var(--colorpicker-border-color);
 }
 
 .colorpicker-inline {
@@ -28,7 +32,7 @@
         position: absolute;
         width: $colorpicker-saturation-guide-size;
         height: $colorpicker-saturation-guide-size;
-        border: $colorpicker-saturation-guide-border-size $border-style $colorpicker-saturation-guide-border-color;
+        border: $colorpicker-saturation-guide-border-width solid $colorpicker-saturation-guide-border-color;
         border-radius: $colorpicker-saturation-guide-border-radius;
         box-shadow: $colorpicker-saturation-guide-box-shadow;
         transform: translate(-50%, -50%);
@@ -88,14 +92,14 @@
         width: 100%;
         height: $colorpicker-hue-alpha-guide-size;
         background-color: $colorpicker-hue-alpha-guide-background-color;
-        border: $colorpicker-hue-alpha-guide-border-size $border-style $colorpicker-hue-alpha-guide-border-color;
+        border: $colorpicker-hue-alpha-guide-border-width solid $colorpicker-hue-alpha-guide-border-color;
         transform: translateY(-50%);
     }
 }
 
 .colorpicker-horizontal {
     .colorpicker-hue {
-        background: $colorpicker-horizontal-hue-background
+        background: $colorpicker-horizontal-hue-background;
     }
 
     .colorpicker-hue,
@@ -113,8 +117,8 @@
 }
 
 .colorpicker-disabled {
-    opacity: $colorpicker-disabled-opacity;
     pointer-events: none;
+    opacity: $colorpicker-disabled-opacity;
 
     .colorpicker-guide {
         display: none;
@@ -123,4 +127,14 @@
 
 .input-group-color {
     width: $input-group-color-width;
+}
+
+.colorpicker-modal {
+    --colorpicker-border-width: 0;
+
+    .colorpicker-saturation {
+        width: 100%;
+        height: initial;
+        padding-top: 100%;
+    }
 }

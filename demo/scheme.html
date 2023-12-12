@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Color Scheme Generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui.css">
     <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@3.0/dist/frost-color.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@latest/dist/frost-color.js"></script>
     <script src="../dist/frost-ui-colorpicker.js"></script>
     <style>
         td {
@@ -93,56 +93,56 @@
     <script>
         (_ => {
             const shades = 10;
-            const initialColor = '#2b55d4';
+            const initialColor = '#2759bc';
 
-            const colorInput = dom.findOne('#color');
-            const paletteTable = dom.findOne('#paletteTable');
-            const complementaryPaletteTable = dom.findOne('#complementaryPaletteTable');
-            const splitPaletteTable1 = dom.findOne('#splitPaletteTable1');
-            const splitPaletteTable2 = dom.findOne('#splitPaletteTable2');
-            const analogousPaletteTable1 = dom.findOne('#analogousPaletteTable1');
-            const analogousPaletteTable2 = dom.findOne('#analogousPaletteTable2');
-            const triadicPaletteTable1 = dom.findOne('#triadicPaletteTable1');
-            const triadicPaletteTable2 = dom.findOne('#triadicPaletteTable2');
-            const tetradicPaletteTable1 = dom.findOne('#tetradicPaletteTable1');
-            const tetradicPaletteTable2 = dom.findOne('#tetradicPaletteTable2');
-            const tetradicPaletteTable3 = dom.findOne('#tetradicPaletteTable3');
+            const colorInput = $.findOne('#color');
+            const paletteTable = $.findOne('#paletteTable');
+            const complementaryPaletteTable = $.findOne('#complementaryPaletteTable');
+            const splitPaletteTable1 = $.findOne('#splitPaletteTable1');
+            const splitPaletteTable2 = $.findOne('#splitPaletteTable2');
+            const analogousPaletteTable1 = $.findOne('#analogousPaletteTable1');
+            const analogousPaletteTable2 = $.findOne('#analogousPaletteTable2');
+            const triadicPaletteTable1 = $.findOne('#triadicPaletteTable1');
+            const triadicPaletteTable2 = $.findOne('#triadicPaletteTable2');
+            const tetradicPaletteTable1 = $.findOne('#tetradicPaletteTable1');
+            const tetradicPaletteTable2 = $.findOne('#tetradicPaletteTable2');
+            const tetradicPaletteTable3 = $.findOne('#tetradicPaletteTable3');
 
             const getTextColor = (background, foreground) => Color.findContrast(background, foreground);
 
             const createCell = (color, shade, tr) => {
-                const td = dom.create('td');
-                dom.setStyle(td, {
+                const td = $.create('td');
+                $.setStyle(td, {
                     backgroundColor: shade,
                     color: getTextColor(shade, color),
                     width: '33%',
                     cursor: 'pointer'
                 });
-                dom.setText(td, shade.toHexString());
-                dom.append(tr, td);
+                $.setText(td, shade.toHexString());
+                $.append(tr, td);
 
-                dom.addEvent(td, 'click', _ => {
-                    dom.setValue(colorInput, shade.toHexString());
-                    dom.triggerEvent(colorInput, 'change');
+                $.addEvent(td, 'click', _ => {
+                    $.setValue(colorInput, shade.toHexString());
+                    $.triggerEvent(colorInput, 'change');
                 });
 
                 return td;
             };
 
             const makePalette = (color, table, shades) => {
-                const tbody = dom.child(table, 'tbody').shift();
-                dom.empty(tbody);
-                dom.detach(tbody);
+                const tbody = $.child(table, 'tbody').shift();
+                $.empty(tbody);
+                $.detach(tbody);
                 const palette = color.palette(shades, shades, shades);
                 for (let i = 0; i < shades; i++) {
-                    const tr = dom.create('tr');
-                    dom.append(tbody, tr);
+                    const tr = $.create('tr');
+                    $.append(tbody, tr);
 
                     const tintTd = createCell(color, palette.tints[i], tr);
 
                     if (i === 0) {
-                        dom.setStyle(tintTd, 'width', '');
-                        dom.setAttribute(tintTd, 'colspan', 3);
+                        $.setStyle(tintTd, { width: '' });
+                        $.setAttribute(tintTd, { colspan: 3 });
                         continue;
                     }
 
@@ -180,9 +180,9 @@
 
             UI.ColorPicker.init(colorInput);
 
-            dom.addEvent(colorInput, 'change.ui.colorpicker', Core.animation(refreshColor));
-            dom.setValue(colorInput, initialColor);
-            dom.triggerOne(colorInput, 'change');
+            $.addEvent(colorInput, 'change.ui.colorpicker', $._debounce(refreshColor, 10));
+            $.setValue(colorInput, initialColor);
+            $.triggerOne(colorInput, 'change');
         })();
     </script>
 </body>

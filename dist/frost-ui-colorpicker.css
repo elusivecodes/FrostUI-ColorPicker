@@ -1,14 +1,17 @@
 .colorpicker {
-  z-index: 1000;
+  --colorpicker-z-index: 1000;
+  --colorpicker-bg: var(--ui-body-bg);
+  --colorpicker-border-width: var(--ui-border-width);
+  --colorpicker-border-color: var(--ui-border-color-translucent);
+  z-index: var(--colorpicker-z-index);
   display: block;
   padding: 0;
   margin: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  -moz-user-select: none;
+  user-select: none;
+  background-color: var(--colorpicker-bg);
+  border: var(--colorpicker-border-width) var(--ui-border-style) var(--colorpicker-border-color);
 }
 
 .colorpicker-inline {
@@ -28,9 +31,9 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  border: 1px solid #000;
+  border: var(--ui-border-width) solid var(--ui-body-color);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 var(--ui-border-width) rgba(var(--ui-body-bg-rgb), 0.8);
   transform: translate(-50%, -50%);
 }
 
@@ -61,7 +64,7 @@
   position: relative;
   max-width: 100%;
   height: 1rem;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 var(--ui-border-width) fade(var(--ui-body-color-rgb), 0.2);
 }
 .colorpicker-bar div {
   position: absolute;
@@ -86,8 +89,8 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  background-color: rgba(var(--ui-body-bg-rgb), 0.8);
+  border: var(--ui-border-width) solid rgba(var(--ui-body-color-rgb), 0.4);
   transform: translateY(-50%);
 }
 
@@ -108,8 +111,8 @@
 }
 
 .colorpicker-disabled {
-  opacity: 0.5;
   pointer-events: none;
+  opacity: var(--ui-disabled-opacity);
 }
 .colorpicker-disabled .colorpicker-guide {
   display: none;
@@ -118,3 +121,14 @@
 .input-group-color {
   width: 2rem;
 }
+
+.colorpicker-modal {
+  --colorpicker-border-width: 0;
+}
+.colorpicker-modal .colorpicker-saturation {
+  width: 100%;
+  height: initial;
+  padding-top: 100%;
+}
+
+/*# sourceMappingURL=frost-ui-colorpicker.css.map */

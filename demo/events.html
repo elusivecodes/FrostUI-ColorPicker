@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrostUI ColorPicker Events</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui.css">
     <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@3.0/dist/frost-color.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@latest/dist/frost-color.js"></script>
     <script src="../dist/frost-ui-colorpicker.js"></script>
 </head>
 
@@ -36,19 +36,19 @@
         </div>
     </div>
     <script>
-        const colorEvents = dom.findOne('#colorEvents');
-        const events = dom.findOne('#events');
+        const colorEvents = $.findOne('#colorEvents');
+        const events = $.findOne('#events');
 
         UI.ColorPicker.init(colorEvents);
 
-        dom.addEvent(colorEvents, 'change.ui.colorpicker show.ui.colorpicker shown.ui.colorpicker hide.ui.colorpicker hidden.ui.colorpicker', e => {
-            const div = dom.create('div', {
+        $.addEvent(colorEvents, 'change.ui.colorpicker show.ui.colorpicker shown.ui.colorpicker hide.ui.colorpicker hidden.ui.colorpicker', e => {
+            const div = $.create('div', {
                 html: `<small>"${e.type}" event triggered</small>`
             });
-            dom.append(events, div);
+            $.append(events, div);
 
-            const scrollHeight = dom.height(events, DOM.SCROLL_BOX);
-            dom.setScrollY(events, scrollHeight);
+            const scrollHeight = $.height(events, { boxSize: $.SCROLL_BOX });
+            $.setScrollY(events, scrollHeight);
         });
     </script>
 </body>

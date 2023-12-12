@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ui-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrostUI ColorPicker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
-    <link rel="stylesheet" href="../dist/frost-ui-colorpicker.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@3.0/dist/frost-color.js"></script>
-    <script src="../dist/frost-ui-colorpicker.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui.css">
+    <link rel="stylesheet" href="../../dist/frost-ui-colorpicker.css">
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@latest/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostcolor@latest/dist/frost-color.js"></script>
+    <script src="../../dist/frost-ui-colorpicker.js"></script>
 </head>
 
 <body>
@@ -82,6 +82,16 @@
             </div>
         </div>
         <div class="mb-4">
+            <label for="colorModal">Force Modal</label>
+            <div class="input-group input-group-filled">
+                <div class="form-input">
+                    <input class="input-filled" id="colorModal" data-ui-modal="true" type="text" placeholder="Placeholder" autocomplete="off" />
+                    <div class="ripple-line"></div>
+                </div>
+                <div class="input-group-text input-group-color"></div>
+            </div>
+        </div>
+        <div class="mb-4">
             <label for="colorInline">Inline</label>
             <div class="form-input">
                 <input class="input-filled" id="colorInline" data-ui-inline="true" type="text" />
@@ -115,13 +125,25 @@
                         <button class="btn-close" data-ui-dismiss="modal" type="button" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="colorModal">Default</label>
-                        <div class="input-group input-group-filled">
-                            <div class="form-input">
-                                <input class="input-filled" id="colorModal" type="text" placeholder="Placeholder" autocomplete="off" />
-                                <div class="ripple-line"></div>
+                        <div class="mb-4">
+                            <label for="modalColorDefault">Default</label>
+                            <div class="input-group input-group-filled">
+                                <div class="form-input">
+                                    <input class="input-filled" id="modalColorDefault" type="text" placeholder="Placeholder" autocomplete="off" />
+                                    <div class="ripple-line"></div>
+                                </div>
+                                <div class="input-group-text input-group-color"></div>
                             </div>
-                            <div class="input-group-text input-group-color"></div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="modalColorModal">Force Modal</label>
+                            <div class="input-group input-group-filled">
+                                <div class="form-input">
+                                    <input class="input-filled" id="modalColorModal" data-ui-modal="true" data-ui-append-to="body" type="text" placeholder="Placeholder" autocomplete="off" />
+                                    <div class="ripple-line"></div>
+                                </div>
+                                <div class="input-group-text input-group-color"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -133,17 +155,19 @@
         </div>
     </div>
     <script>
-        const colorDefault = dom.findOne('#colorDefault');
-        const colorHex = dom.findOne('#colorHex');
-        const colorRGB = dom.findOne('#colorRGB');
-        const colorHSL = dom.findOne('#colorHSL');
-        const colorName = dom.findOne('#colorName');
-        const colorDisabled = dom.findOne('#colorDisabled');
-        const colorHorizontal = dom.findOne('#colorHorizontal');
-        const colorInline = dom.findOne('#colorInline');
-        const colorInlineDisabled = dom.findOne('#colorInlineDisabled');
-        const colorAlphaDisabled = dom.findOne('#colorAlphaDisabled');
-        const colorModal = dom.findOne('#colorModal');
+        const colorDefault = $.findOne('#colorDefault');
+        const colorHex = $.findOne('#colorHex');
+        const colorRGB = $.findOne('#colorRGB');
+        const colorHSL = $.findOne('#colorHSL');
+        const colorName = $.findOne('#colorName');
+        const colorDisabled = $.findOne('#colorDisabled');
+        const colorHorizontal = $.findOne('#colorHorizontal');
+        const colorModal = $.findOne('#colorModal');
+        const colorInline = $.findOne('#colorInline');
+        const colorInlineDisabled = $.findOne('#colorInlineDisabled');
+        const colorAlphaDisabled = $.findOne('#colorAlphaDisabled');
+        const modalColorDefault = $.findOne('#modalColorDefault');
+        const modalColorModal = $.findOne('#modalColorModal');
 
         UI.ColorPicker.init(colorDefault);
         UI.ColorPicker.init(colorHex);
@@ -152,10 +176,12 @@
         UI.ColorPicker.init(colorName);
         UI.ColorPicker.init(colorDisabled);
         UI.ColorPicker.init(colorHorizontal);
+        UI.ColorPicker.init(colorModal);
         UI.ColorPicker.init(colorInline);
         UI.ColorPicker.init(colorInlineDisabled);
         UI.ColorPicker.init(colorAlphaDisabled);
-        UI.ColorPicker.init(colorModal);
+        UI.ColorPicker.init(modalColorDefault);
+        UI.ColorPicker.init(modalColorModal);
     </script>
 </body>
 
