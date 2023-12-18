@@ -472,12 +472,8 @@
                     return;
                 }
 
-                if (!this._options.modal) {
-                    $.stop(this._menuNode);
-                    $.removeDataset(this._menuNode, 'uiAnimating');
-                } else {
-                    this._activeTarget = this._node;
-                }
+                $.stop(this._menuNode);
+                $.removeDataset(this._menuNode, 'uiAnimating');
 
                 this.show();
             });
@@ -491,10 +487,8 @@
                     return;
                 }
 
-                if (!this._options.modal) {
-                    $.stop(this._menuNode);
-                    $.removeDataset(this._menuNode, 'uiAnimating');
-                }
+                $.stop(this._menuNode);
+                $.removeDataset(this._menuNode, 'uiAnimating');
 
                 this.hide();
             });
