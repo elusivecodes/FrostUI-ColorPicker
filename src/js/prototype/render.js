@@ -83,6 +83,10 @@ export function _render() {
         $.hide(this._node);
     } else {
         $.addClass(this._menuNode, this.constructor.classes.menuPadding);
+        $.setAttribute(this._menuNode, {
+            'role': 'dialog',
+            'aria-modal': true,
+        });
     }
 };
 
