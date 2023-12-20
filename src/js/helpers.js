@@ -1,6 +1,15 @@
 import Color from '@fr0st/color';
 
 /**
+ * Format a number as a percent string.
+ * @param {number} number The number.
+ * @return {string} The percent string.
+ */
+export function formatPercent(number) {
+    return Number(number).toLocaleString('en-US', { style: 'percent' });
+};
+
+/**
  * Get the color format from a value.
  * @param {string} value The color value.
  * @return {string|null} The color format.

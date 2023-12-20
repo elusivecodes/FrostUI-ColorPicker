@@ -1,4 +1,5 @@
-import { initComponent } from '@fr0st/ui';
+import $ from '@fr0st/query';
+import { getClickTarget, initComponent } from '@fr0st/ui';
 import ColorPicker from './color-picker.js';
 import { parseColor } from './helpers.js';
 import { _events, _eventsModal } from './prototype/events.js';
@@ -51,6 +52,15 @@ ColorPicker.classes = {
     spacingVertical: 'me-2',
 };
 
+// ColorPicker Lang
+ColorPicker.lang = {
+    alpha: 'Alpha',
+    brightness: 'Brightness',
+    color: 'Color',
+    hue: 'Hue',
+    saturation: 'Saturation',
+};
+
 // ColorPicker static
 ColorPicker.parseColor = parseColor;
 
@@ -74,5 +84,47 @@ proto._updateSaturation = _updateSaturation;
 
 // ColorPicker init
 initComponent('colorpicker', ColorPicker);
+
+// ColorPicker events
+$.addEvent(document, 'click.ui.colorpicker', (e) => {
+    const target = getClickTarget(e);
+    const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
+
+    for (const node of nodes) {
+        const input = $.getData(node, 'input');
+        const colorpicker = ColorPicker.init(input);
+
+        if (
+            $.isSame(colorpicker._node, target) ||
+            $.isSame(colorpicker._menuNode, target) ||
+            $.hasDescendent(colorpicker._menuNode, target)
+        ) {
+            continue;
+        }
+
+        colorpicker.hide();
+    }
+}, { capture: true });
+
+$.addEvent(document, 'keyup.ui.colorpicker', (e) => {
+    if (e.code !== 'Escape') {
+        return;
+    }
+
+    let stopped = false;
+    const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
+
+    for (const node of nodes) {
+        const input = $.getData(node, 'input');
+        const colorpicker = ColorPicker.init(input);
+
+        if (!stopped) {
+            stopped = true;
+            e.stopPropagation();
+        }
+
+        colorpicker.hide();
+    }
+}, { capture: true });
 
 export default ColorPicker;

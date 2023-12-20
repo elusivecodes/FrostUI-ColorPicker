@@ -18,8 +18,13 @@ export function _render() {
     });
     $.append(this._container, this._saturation);
 
-    this._saturationGuide = $.create('div', {
+    this._saturationGuide = $.create('button', {
         class: this.constructor.classes.guide,
+        attributes: {
+            'type': 'button',
+            'role': 'slider',
+            'aria-label': this.constructor.lang.color,
+        },
     });
     $.append(this._saturation, this._saturationGuide);
 
@@ -28,8 +33,13 @@ export function _render() {
     });
     $.append(this._container, this._hue);
 
-    this._hueGuide = $.create('div', {
+    this._hueGuide = $.create('button', {
         class: this.constructor.classes.guide,
+        attributes: {
+            'type': 'button',
+            'role': 'slider',
+            'aria-label': this.constructor.lang.hue,
+        },
     });
     $.append(this._hue, this._hueGuide);
 
@@ -44,8 +54,13 @@ export function _render() {
         });
         $.append(this._alpha, this._alphaColor);
 
-        this._alphaGuide = $.create('div', {
+        this._alphaGuide = $.create('button', {
             class: this.constructor.classes.guide,
+            attributes: {
+                'type': 'button',
+                'role': 'slider',
+                'aria-label': this.constructor.lang.alpha,
+            },
         });
         $.append(this._alpha, this._alphaGuide);
     }

@@ -66,6 +66,15 @@ export default class ColorPicker extends BaseComponent {
             this._eventsModal();
         }
 
+        $.setData(this._menuNode, { input: this._node });
+
+        this._values = {
+            alpha: 1,
+            brightness: 0,
+            hue: 0,
+            saturation: 0,
+        };
+
         this._updateAttributes();
         this._refresh();
         this._refreshDisabled();
@@ -239,6 +248,13 @@ export default class ColorPicker extends BaseComponent {
         }
 
         $.setDataset(this._menuNode, { uiAnimating: 'in' });
+
+        $.removeAttribute(this._saturationGuide, 'tabindex');
+        $.removeAttribute(this._hueGuide, 'tabindex');
+
+        if (this._options.alpha) {
+            $.removeAttribute(this._alphaGuide, 'tabindex');
+        }
 
         if (this._options.appendTo) {
             $.append(this._options.appendTo, this._menuNode);

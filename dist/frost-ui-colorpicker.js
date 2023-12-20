@@ -1,9 +1,17 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fr0st/ui'), require('@fr0st/color'), require('@fr0st/query')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@fr0st/ui', '@fr0st/color', '@fr0st/query'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.UI = global.UI || {}, global.UI, global.Color, global.fQuery));
-})(this, (function (exports, ui, Color$1, $) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fr0st/query'), require('@fr0st/ui'), require('@fr0st/color')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@fr0st/query', '@fr0st/ui', '@fr0st/color'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.UI = global.UI || {}, global.fQuery, global.UI, global.Color));
+})(this, (function (exports, $, ui, Color$1) { 'use strict';
 
+    /**
+     * Format a number as a percent string.
+     * @param {number} number The number.
+     * @return {string} The percent string.
+     */
+    function formatPercent(number) {
+        return Number(number).toLocaleString('en-US', { style: 'percent' });
+    }
     /**
      * Get the color format from a value.
      * @param {string} value The color value.
@@ -109,6 +117,15 @@
                 this._renderModal();
                 this._eventsModal();
             }
+
+            $.setData(this._menuNode, { input: this._node });
+
+            this._values = {
+                alpha: 1,
+                brightness: 0,
+                hue: 0,
+                saturation: 0,
+            };
 
             this._updateAttributes();
             this._refresh();
@@ -284,6 +301,13 @@
 
             $.setDataset(this._menuNode, { uiAnimating: 'in' });
 
+            $.removeAttribute(this._saturationGuide, 'tabindex');
+            $.removeAttribute(this._hueGuide, 'tabindex');
+
+            if (this._options.alpha) {
+                $.removeAttribute(this._alphaGuide, 'tabindex');
+            }
+
             if (this._options.appendTo) {
                 $.append(this._options.appendTo, this._menuNode);
             } else {
@@ -339,15 +363,12 @@
      * Attach events for the ColorPicker.
      */
     function _events() {
-        $.addEvent(this._menuNode, 'contextmenu.ui.colorpicker', (e) => {
-            // prevent menu node from showing right click menu
-            e.preventDefault();
-        });
-
         const saturationDownEvent = (e) => {
             if (e.button) {
                 return false;
             }
+
+            $.focus(this._saturationGuide);
         };
 
         const saturationMoveEvent = (e) => {
@@ -366,12 +387,52 @@
 
             const pos = ui.getPosition(e);
             this._updateSaturation(pos.x, pos.y);
+
+            $.focus(this._saturationGuide);
+        });
+
+        $.addEvent(this._saturationGuide, 'keydown.ui.colorpicker', (e) => {
+            switch (e.code) {
+                case 'ArrowRight':
+                    this._values.saturation = Math.min(100, this._values.saturation + 1);
+                    break;
+                case 'ArrowDown':
+                    this._values.brightness = Math.max(0, this._values.brightness - 1);
+                    break;
+                case 'ArrowLeft':
+                    this._values.saturation = Math.max(0, this._values.saturation - 1);
+                    break;
+                case 'ArrowUp':
+                    this._values.brightness = Math.min(100, this._values.brightness + 1);
+                    break;
+                case 'Tab':
+                    if (
+                        e.shiftKey &&
+                        !this._options.inline &&
+                        !this._options.modal
+                    ) {
+                        e.preventDefault();
+
+                        $.focus(this._node);
+
+                        this.hide();
+                    }
+                    return;
+                default:
+                    return;
+            }
+
+            e.preventDefault();
+
+            this._updateColor();
         });
 
         const hueDownEvent = (e) => {
             if (e.button) {
                 return false;
             }
+
+            $.focus(this._hueGuide);
         };
 
         const hueMoveEvent = (e) => {
@@ -390,6 +451,42 @@
 
             const pos = ui.getPosition(e);
             this._updateHue(pos.x, pos.y);
+
+            $.focus(this._hueGuide);
+        });
+
+        $.addEvent(this._hueGuide, 'keydown.ui.colorpicker', (e) => {
+            switch (e.code) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    this._values.hue = Math.max(0, this._values.hue - 1);
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    this._values.hue = Math.min(360, this._values.hue + 1);
+                    break;
+                case 'Tab':
+                    if (
+                        !e.shiftKey &&
+                        !this._options.inline &&
+                        !this._options.modal &&
+                        !this._options.alpha
+                    ) {
+                        $.focus(this._node);
+
+                        $.setAttribute(this._saturationGuide, { tabindex: -1 });
+                        $.setAttribute(this._hueGuide, { tabindex: -1 });
+
+                        this.hide();
+                    }
+                    return;
+                default:
+                    return;
+            }
+
+            e.preventDefault();
+
+            this._updateColor();
         });
 
         if (this._options.alpha) {
@@ -397,6 +494,8 @@
                 if (e.button) {
                     return false;
                 }
+
+                $.focus(this._alphaGuide);
             };
 
             const alphaMoveEvent = (e) => {
@@ -415,6 +514,42 @@
 
                 const pos = ui.getPosition(e);
                 this._updateAlpha(pos.x, pos.y);
+
+                $.focus(this._alphaGuide);
+            });
+
+            $.addEvent(this._alphaGuide, 'keydown.ui.colorpicker', (e) => {
+                switch (e.code) {
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        this._values.alpha = Math.max(0, this._values.alpha - .01);
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                        this._values.alpha = Math.min(1, this._values.alpha + .01);
+                        break;
+                    case 'Tab':
+                        if (
+                            !e.shiftKey &&
+                            !this._options.inline &&
+                            !this._options.modal
+                        ) {
+                            $.focus(this._node);
+
+                            $.setAttribute(this._saturationGuide, { tabindex: -1 });
+                            $.setAttribute(this._hueGuide, { tabindex: -1 });
+                            $.setAttribute(this._alphaGuide, { tabindex: -1 });
+
+                            this.hide();
+                        }
+                        return;
+                    default:
+                        return;
+                }
+
+                e.preventDefault();
+
+                this._updateColor();
             });
         }
 
@@ -446,11 +581,6 @@
             e.stopPropagation();
         });
 
-        $.addEvent(this._menuNode, 'mousedown.ui.colorpicker', (e) => {
-            // prevent menu node from triggering blur event
-            e.preventDefault();
-        });
-
         $.addEvent(this._node, 'click.ui.colorpicker', (_) => {
             if ($.getDataset(this._menuNode, 'uiAnimating') === 'in') {
                 return;
@@ -477,21 +607,6 @@
 
                 this.show();
             });
-
-            $.addEvent(this._node, 'blur.ui.colorpicker', (_) => {
-                if ($.isSame(this._node, document.activeElement)) {
-                    return;
-                }
-
-                if ($.getDataset(this._menuNode, 'uiAnimating') === 'out') {
-                    return;
-                }
-
-                $.stop(this._menuNode);
-                $.removeDataset(this._menuNode, 'uiAnimating');
-
-                this.hide();
-            });
         }
 
         $.addEvent(this._node, 'keydown.ui.colorpicker', (e) => {
@@ -501,6 +616,24 @@
                     e.preventDefault();
 
                     this.toggle();
+                    break;
+                case 'Tab':
+                    if (
+                        e.shiftKey &&
+                        !this._options.modal &&
+                        $.isConnected(this._menuNode)
+                    ) {
+                        this.hide();
+                    } else if (
+                        !e.shiftKey &&
+                        !this._options.modal &&
+                        $.isConnected(this._menuNode) &&
+                        !$.getDataset(this._menuNode, 'uiAnimating')
+                    ) {
+                        e.preventDefault();
+
+                        $.focus(this._saturationGuide);
+                    }
                     break;
             }
         });
@@ -610,12 +743,20 @@
             left: `${this._values.saturation}%`,
         });
 
+        $.setAttribute(this._saturationGuide, {
+            'aria-valuetext': `${this.constructor.lang.saturation} ${formatPercent(this._values.saturation / 100)}, ${this.constructor.lang.brightness} ${formatPercent(this._values.brightness / 100)}`,
+        });
+
         const hueOffset = `${100 - (this._values.hue / 3.6)}%`;
         if (this._options.horizontal) {
             $.setStyle(this._hueGuide, { left: hueOffset });
         } else {
             $.setStyle(this._hueGuide, { top: hueOffset });
         }
+
+        $.setAttribute(this._hueGuide, {
+            'aria-valuetext': Math.round(this._values.hue),
+        });
 
         if (this._options.alpha) {
             const alphaColor = Color.fromHSV(this._values.hue, this._values.saturation, this._values.brightness);
@@ -632,6 +773,10 @@
             } else {
                 $.setStyle(this._alphaGuide, { top: alphaOffset });
             }
+
+            $.setAttribute(this._alphaGuide, {
+                'aria-valuetext': formatPercent(this._values.alpha),
+            });
         }
 
         $.setStyle(this._previewColor, {
@@ -714,14 +859,19 @@
      * Update the color attributes.
      */
     function _updateAttributes() {
-        this._values = {
-            alpha: this._options.alpha ?
-                this._color.getAlpha() :
-                1,
-            brightness: this._color.getBrightness(),
-            hue: this._color.getHue(),
-            saturation: this._color.getSaturation(),
-        };
+        this._values.alpha = this._options.alpha ?
+            this._color.getAlpha() :
+            1;
+
+        this._values.brightness = this._color.getBrightness();
+
+        if (this._values.brightness > 0) {
+            this._values.saturation = this._color.getSaturation();
+        }
+
+        if (this._values.brightness > 0 && this._values.saturation > 0) {
+            this._values.hue = this._color.getHue();
+        }
     }
     /**
     /**
@@ -778,8 +928,13 @@
         });
         $.append(this._container, this._saturation);
 
-        this._saturationGuide = $.create('div', {
+        this._saturationGuide = $.create('button', {
             class: this.constructor.classes.guide,
+            attributes: {
+                'type': 'button',
+                'role': 'slider',
+                'aria-label': this.constructor.lang.color,
+            },
         });
         $.append(this._saturation, this._saturationGuide);
 
@@ -788,8 +943,13 @@
         });
         $.append(this._container, this._hue);
 
-        this._hueGuide = $.create('div', {
+        this._hueGuide = $.create('button', {
             class: this.constructor.classes.guide,
+            attributes: {
+                'type': 'button',
+                'role': 'slider',
+                'aria-label': this.constructor.lang.hue,
+            },
         });
         $.append(this._hue, this._hueGuide);
 
@@ -804,8 +964,13 @@
             });
             $.append(this._alpha, this._alphaColor);
 
-            this._alphaGuide = $.create('div', {
+            this._alphaGuide = $.create('button', {
                 class: this.constructor.classes.guide,
+                attributes: {
+                    'type': 'button',
+                    'role': 'slider',
+                    'aria-label': this.constructor.lang.alpha,
+                },
             });
             $.append(this._alpha, this._alphaGuide);
         }
@@ -958,6 +1123,15 @@
         spacingVertical: 'me-2',
     };
 
+    // ColorPicker Lang
+    ColorPicker.lang = {
+        alpha: 'Alpha',
+        brightness: 'Brightness',
+        color: 'Color',
+        hue: 'Hue',
+        saturation: 'Saturation',
+    };
+
     // ColorPicker static
     ColorPicker.parseColor = parseColor;
 
@@ -981,6 +1155,48 @@
 
     // ColorPicker init
     ui.initComponent('colorpicker', ColorPicker);
+
+    // ColorPicker events
+    $.addEvent(document, 'click.ui.colorpicker', (e) => {
+        const target = ui.getClickTarget(e);
+        const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
+
+        for (const node of nodes) {
+            const input = $.getData(node, 'input');
+            const colorpicker = ColorPicker.init(input);
+
+            if (
+                $.isSame(colorpicker._node, target) ||
+                $.isSame(colorpicker._menuNode, target) ||
+                $.hasDescendent(colorpicker._menuNode, target)
+            ) {
+                continue;
+            }
+
+            colorpicker.hide();
+        }
+    }, { capture: true });
+
+    $.addEvent(document, 'keyup.ui.colorpicker', (e) => {
+        if (e.code !== 'Escape') {
+            return;
+        }
+
+        let stopped = false;
+        const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
+
+        for (const node of nodes) {
+            const input = $.getData(node, 'input');
+            const colorpicker = ColorPicker.init(input);
+
+            if (!stopped) {
+                stopped = true;
+                e.stopPropagation();
+            }
+
+            colorpicker.hide();
+        }
+    }, { capture: true });
 
     exports.ColorPicker = ColorPicker;
 

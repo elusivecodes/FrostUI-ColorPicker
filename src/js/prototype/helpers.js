@@ -1,4 +1,5 @@
 import $ from '@fr0st/query';
+import { formatPercent } from './../helpers.js';
 
 /**
  * Get the color string.
@@ -40,12 +41,20 @@ export function _refresh() {
         left: `${this._values.saturation}%`,
     });
 
+    $.setAttribute(this._saturationGuide, {
+        'aria-valuetext': `${this.constructor.lang.saturation} ${formatPercent(this._values.saturation / 100)}, ${this.constructor.lang.brightness} ${formatPercent(this._values.brightness / 100)}`,
+    });
+
     const hueOffset = `${100 - (this._values.hue / 3.6)}%`;
     if (this._options.horizontal) {
         $.setStyle(this._hueGuide, { left: hueOffset });
     } else {
         $.setStyle(this._hueGuide, { top: hueOffset });
     }
+
+    $.setAttribute(this._hueGuide, {
+        'aria-valuetext': Math.round(this._values.hue),
+    });
 
     if (this._options.alpha) {
         const alphaColor = Color.fromHSV(this._values.hue, this._values.saturation, this._values.brightness);
@@ -62,6 +71,10 @@ export function _refresh() {
         } else {
             $.setStyle(this._alphaGuide, { top: alphaOffset });
         }
+
+        $.setAttribute(this._alphaGuide, {
+            'aria-valuetext': formatPercent(this._values.alpha),
+        });
     }
 
     $.setStyle(this._previewColor, {
@@ -148,14 +161,19 @@ export function _updateAlpha(x, y) {
  * Update the color attributes.
  */
 export function _updateAttributes() {
-    this._values = {
-        alpha: this._options.alpha ?
-            this._color.getAlpha() :
-            1,
-        brightness: this._color.getBrightness(),
-        hue: this._color.getHue(),
-        saturation: this._color.getSaturation(),
-    };
+    this._values.alpha = this._options.alpha ?
+        this._color.getAlpha() :
+        1;
+
+    this._values.brightness = this._color.getBrightness();
+
+    if (this._values.brightness > 0) {
+        this._values.saturation = this._color.getSaturation();
+    }
+
+    if (this._values.brightness > 0 && this._values.saturation > 0) {
+        this._values.hue = this._color.getHue();
+    }
 };
 
 /**

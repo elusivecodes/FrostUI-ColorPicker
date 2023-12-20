@@ -32,10 +32,16 @@
         position: absolute;
         width: $colorpicker-saturation-guide-size;
         height: $colorpicker-saturation-guide-size;
+        padding: 0;
         border: $colorpicker-saturation-guide-border-width solid $colorpicker-saturation-guide-border-color;
         border-radius: $colorpicker-saturation-guide-border-radius;
         box-shadow: $colorpicker-saturation-guide-box-shadow;
         transform: translate(-50%, -50%);
+
+        &:focus {
+            box-shadow: $colorpicker-saturation-guide-focus-box-shadow;
+            outline: 0;
+        }
     }
 }
 
@@ -91,9 +97,16 @@
         left: 0;
         width: 100%;
         height: $colorpicker-hue-alpha-guide-size;
+        padding: 0;
         background-color: $colorpicker-hue-alpha-guide-background-color;
         border: $colorpicker-hue-alpha-guide-border-width solid $colorpicker-hue-alpha-guide-border-color;
+        border-radius: $colorpicker-hue-alpha-guide-border-radius;
         transform: translateY(-50%);
+
+        &:focus {
+            box-shadow: $colorpicker-hue-alpha-guide-focus-box-shadow;
+            outline: 0;
+        }
     }
 }
 

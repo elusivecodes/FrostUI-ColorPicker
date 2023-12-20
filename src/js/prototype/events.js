@@ -6,15 +6,12 @@ import { parseColor } from './../helpers.js';
  * Attach events for the ColorPicker.
  */
 export function _events() {
-    $.addEvent(this._menuNode, 'contextmenu.ui.colorpicker', (e) => {
-        // prevent menu node from showing right click menu
-        e.preventDefault();
-    });
-
     const saturationDownEvent = (e) => {
         if (e.button) {
             return false;
         }
+
+        $.focus(this._saturationGuide);
     };
 
     const saturationMoveEvent = (e) => {
@@ -33,12 +30,52 @@ export function _events() {
 
         const pos = getPosition(e);
         this._updateSaturation(pos.x, pos.y);
+
+        $.focus(this._saturationGuide);
+    });
+
+    $.addEvent(this._saturationGuide, 'keydown.ui.colorpicker', (e) => {
+        switch (e.code) {
+            case 'ArrowRight':
+                this._values.saturation = Math.min(100, this._values.saturation + 1);
+                break;
+            case 'ArrowDown':
+                this._values.brightness = Math.max(0, this._values.brightness - 1);
+                break;
+            case 'ArrowLeft':
+                this._values.saturation = Math.max(0, this._values.saturation - 1);
+                break;
+            case 'ArrowUp':
+                this._values.brightness = Math.min(100, this._values.brightness + 1);
+                break;
+            case 'Tab':
+                if (
+                    e.shiftKey &&
+                    !this._options.inline &&
+                    !this._options.modal
+                ) {
+                    e.preventDefault();
+
+                    $.focus(this._node);
+
+                    this.hide();
+                }
+                return;
+            default:
+                return;
+        }
+
+        e.preventDefault();
+
+        this._updateColor();
     });
 
     const hueDownEvent = (e) => {
         if (e.button) {
             return false;
         }
+
+        $.focus(this._hueGuide);
     };
 
     const hueMoveEvent = (e) => {
@@ -57,6 +94,42 @@ export function _events() {
 
         const pos = getPosition(e);
         this._updateHue(pos.x, pos.y);
+
+        $.focus(this._hueGuide);
+    });
+
+    $.addEvent(this._hueGuide, 'keydown.ui.colorpicker', (e) => {
+        switch (e.code) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                this._values.hue = Math.max(0, this._values.hue - 1);
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                this._values.hue = Math.min(360, this._values.hue + 1);
+                break;
+            case 'Tab':
+                if (
+                    !e.shiftKey &&
+                    !this._options.inline &&
+                    !this._options.modal &&
+                    !this._options.alpha
+                ) {
+                    $.focus(this._node);
+
+                    $.setAttribute(this._saturationGuide, { tabindex: -1 });
+                    $.setAttribute(this._hueGuide, { tabindex: -1 });
+
+                    this.hide();
+                }
+                return;
+            default:
+                return;
+        }
+
+        e.preventDefault();
+
+        this._updateColor();
     });
 
     if (this._options.alpha) {
@@ -64,6 +137,8 @@ export function _events() {
             if (e.button) {
                 return false;
             }
+
+            $.focus(this._alphaGuide);
         };
 
         const alphaMoveEvent = (e) => {
@@ -82,6 +157,42 @@ export function _events() {
 
             const pos = getPosition(e);
             this._updateAlpha(pos.x, pos.y);
+
+            $.focus(this._alphaGuide);
+        });
+
+        $.addEvent(this._alphaGuide, 'keydown.ui.colorpicker', (e) => {
+            switch (e.code) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    this._values.alpha = Math.max(0, this._values.alpha - .01);
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    this._values.alpha = Math.min(1, this._values.alpha + .01);
+                    break;
+                case 'Tab':
+                    if (
+                        !e.shiftKey &&
+                        !this._options.inline &&
+                        !this._options.modal
+                    ) {
+                        $.focus(this._node);
+
+                        $.setAttribute(this._saturationGuide, { tabindex: -1 });
+                        $.setAttribute(this._hueGuide, { tabindex: -1 });
+                        $.setAttribute(this._alphaGuide, { tabindex: -1 });
+
+                        this.hide();
+                    }
+                    return;
+                default:
+                    return;
+            }
+
+            e.preventDefault();
+
+            this._updateColor();
         });
     }
 
@@ -113,11 +224,6 @@ export function _events() {
         e.stopPropagation();
     });
 
-    $.addEvent(this._menuNode, 'mousedown.ui.colorpicker', (e) => {
-        // prevent menu node from triggering blur event
-        e.preventDefault();
-    });
-
     $.addEvent(this._node, 'click.ui.colorpicker', (_) => {
         if ($.getDataset(this._menuNode, 'uiAnimating') === 'in') {
             return;
@@ -144,21 +250,6 @@ export function _events() {
 
             this.show();
         });
-
-        $.addEvent(this._node, 'blur.ui.colorpicker', (_) => {
-            if ($.isSame(this._node, document.activeElement)) {
-                return;
-            }
-
-            if ($.getDataset(this._menuNode, 'uiAnimating') === 'out') {
-                return;
-            }
-
-            $.stop(this._menuNode);
-            $.removeDataset(this._menuNode, 'uiAnimating');
-
-            this.hide();
-        });
     }
 
     $.addEvent(this._node, 'keydown.ui.colorpicker', (e) => {
@@ -168,6 +259,24 @@ export function _events() {
                 e.preventDefault();
 
                 this.toggle();
+                break;
+            case 'Tab':
+                if (
+                    e.shiftKey &&
+                    !this._options.modal &&
+                    $.isConnected(this._menuNode)
+                ) {
+                    this.hide();
+                } else if (
+                    !e.shiftKey &&
+                    !this._options.modal &&
+                    $.isConnected(this._menuNode) &&
+                    !$.getDataset(this._menuNode, 'uiAnimating')
+                ) {
+                    e.preventDefault();
+
+                    $.focus(this._saturationGuide);
+                }
                 break;
         }
     });
