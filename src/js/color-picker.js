@@ -105,7 +105,6 @@ export default class ColorPicker extends BaseComponent {
         $.removeEvent(this._node, 'change.ui.colorpicker');
         $.removeEvent(this._node, 'click.ui.colorpicker');
         $.removeEvent(this._node, 'focus.ui.colorpicker');
-        $.removeEvent(this._node, 'blur.ui.colorpicker');
         $.removeEvent(this._node, 'keydown.ui.colorpicker');
         $.removeEvent(this._node, 'keyup.ui.colorpicker');
 
