@@ -466,8 +466,6 @@
                     break;
                 case 'Tab':
                     if (
-                        !e.shiftKey &&
-                        !this._options.inline &&
                         !this._options.modal &&
                         !this._options.alpha
                     ) {
@@ -571,6 +569,27 @@
             }
         });
 
+        $.addEvent(this._menuNode, 'keydown.ui.colorpicker', (e) => {
+            switch (e.code) {
+                case 'Enter':
+                case 'NumpadEnter':
+                    e.preventDefault();
+
+                    if (this._options.inline) {
+                        return;
+                    }
+
+                    if (this._options.modal) {
+                        this._keepColor = true;
+                    } else {
+                        $.focus(this._node);
+                    }
+
+                    this.hide();
+                    break;
+            }
+        });
+
         if (this._options.inline) {
             return;
         }
@@ -616,6 +635,14 @@
 
                     this.toggle();
                     break;
+                case 'Escape':
+                    if ($.isConnected(this._menuNode)) {
+                        // prevent node from closing modal
+                        e.stopPropagation();
+
+                        this.hide();
+                    }
+                    break;
                 case 'Tab':
                     if (
                         e.shiftKey &&
@@ -637,17 +664,6 @@
             }
         });
 
-        $.addEvent(this._node, 'keyup.ui.colorpicker', (e) => {
-            if (e.code !== 'Escape' || !$.isConnected(this._menuNode)) {
-                return;
-            }
-
-            // prevent node from closing modal
-            e.stopPropagation();
-
-            this.hide();
-        });
-
         if (this._inputGroupColor) {
             $.addEvent(this._inputGroupColor, 'mousedown.ui.colorpicker', (e) => {
                 // prevent group color addon from triggering blur event
@@ -665,7 +681,7 @@
      */
     function _eventsModal() {
         let originalValue;
-        let keepColor = false;
+        this._keepColor = false;
 
         $.addEvent(this._modal, 'show.ui.modal', (_) => {
             if (!$.triggerOne(this._node, 'show.ui.colorpicker')) {
@@ -676,31 +692,33 @@
         });
 
         $.addEvent(this._modal, 'shown.ui.modal', (_) => {
+            $.focus(this._saturationGuide);
+
             $.triggerEvent(this._node, 'shown.ui.colorpicker');
         });
 
         $.addEvent(this._modal, 'hide.ui.modal', (_) => {
             if (!$.triggerOne(this._node, 'hide.ui.colorpicker')) {
-                keepColor = false;
+                this._keepColor = false;
                 return false;
             }
 
             this._activeTarget = null;
 
-            if (!keepColor) {
+            if (!this._keepColor) {
                 $.setValue(this._node, originalValue);
                 $.triggerEvent(this._node, 'change.ui.colorpicker');
             }
         });
 
         $.addEvent(this._modal, 'hidden.ui.modal', (_) => {
-            keepColor = false;
+            this._keepColor = false;
             $.detach(this._modal);
             $.triggerEvent(this._node, 'hidden.ui.colorpicker');
         });
 
         $.addEvent(this._setBtn, 'click.ui.modal', (_) => {
-            keepColor = true;
+            this._keepColor = true;
         });
     }
 
@@ -1176,7 +1194,7 @@
         }
     }, { capture: true });
 
-    $.addEvent(document, 'keyup.ui.colorpicker', (e) => {
+    $.addEvent(document, 'keydown.ui.colorpicker', (e) => {
         if (e.code !== 'Escape') {
             return;
         }
@@ -1184,7 +1202,7 @@
         let stopped = false;
         const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
 
-        for (const node of nodes) {
+        for (const [i, node] of nodes.entries()) {
             const input = $.getData(node, 'input');
             const colorpicker = ColorPicker.init(input);
 
@@ -1194,6 +1212,10 @@
             }
 
             colorpicker.hide();
+
+            if (i == 0) {
+                $.focus(input);
+            }
         }
     }, { capture: true });
 

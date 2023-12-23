@@ -106,7 +106,7 @@ $.addEvent(document, 'click.ui.colorpicker', (e) => {
     }
 }, { capture: true });
 
-$.addEvent(document, 'keyup.ui.colorpicker', (e) => {
+$.addEvent(document, 'keydown.ui.colorpicker', (e) => {
     if (e.code !== 'Escape') {
         return;
     }
@@ -114,7 +114,7 @@ $.addEvent(document, 'keyup.ui.colorpicker', (e) => {
     let stopped = false;
     const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
 
-    for (const node of nodes) {
+    for (const [i, node] of nodes.entries()) {
         const input = $.getData(node, 'input');
         const colorpicker = ColorPicker.init(input);
 
@@ -124,6 +124,10 @@ $.addEvent(document, 'keyup.ui.colorpicker', (e) => {
         }
 
         colorpicker.hide();
+
+        if (i == 0) {
+            $.focus(input);
+        }
     }
 }, { capture: true });
 

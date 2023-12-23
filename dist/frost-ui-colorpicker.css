@@ -37,7 +37,7 @@
   box-shadow: 0 0 0 var(--ui-border-width) rgba(var(--ui-body-bg-rgb), 0.8);
   transform: translate(-50%, -50%);
 }
-.colorpicker-saturation .colorpicker-guide:focus {
+.colorpicker-saturation .colorpicker-guide:focus-visible {
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
   outline: 0;
 }
@@ -100,8 +100,8 @@
   border-radius: var(--ui-border-radius);
   transform: translateY(-50%);
 }
-.colorpicker-hue .colorpicker-guide:focus,
-.colorpicker-alpha .colorpicker-guide:focus {
+.colorpicker-hue .colorpicker-guide:focus-visible,
+.colorpicker-alpha .colorpicker-guide:focus-visible {
   box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
   outline: 0;
 }

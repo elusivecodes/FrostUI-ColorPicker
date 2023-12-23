@@ -38,7 +38,7 @@
         box-shadow: $colorpicker-saturation-guide-box-shadow;
         transform: translate(-50%, -50%);
 
-        &:focus {
+        &:focus-visible {
             box-shadow: $colorpicker-saturation-guide-focus-box-shadow;
             outline: 0;
         }
@@ -103,7 +103,7 @@
         border-radius: $colorpicker-hue-alpha-guide-border-radius;
         transform: translateY(-50%);
 
-        &:focus {
+        &:focus-visible {
             box-shadow: $colorpicker-hue-alpha-guide-focus-box-shadow;
             outline: 0;
         }
