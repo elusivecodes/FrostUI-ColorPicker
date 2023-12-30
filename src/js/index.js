@@ -1,5 +1,5 @@
 import $ from '@fr0st/query';
-import { getClickTarget, initComponent } from '@fr0st/ui';
+import { initComponent } from '@fr0st/ui';
 import ColorPicker from './color-picker.js';
 import { parseColor } from './helpers.js';
 import { _events, _eventsModal } from './prototype/events.js';
@@ -86,8 +86,7 @@ proto._updateSaturation = _updateSaturation;
 initComponent('colorpicker', ColorPicker);
 
 // ColorPicker events
-$.addEvent(document, 'click.ui.colorpicker', (e) => {
-    const target = getClickTarget(e);
+$.addEvent(document, 'mousedown.ui.colorpicker', (e) => {
     const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
 
     for (const node of nodes) {
@@ -95,9 +94,9 @@ $.addEvent(document, 'click.ui.colorpicker', (e) => {
         const colorpicker = ColorPicker.init(input);
 
         if (
-            $.isSame(colorpicker._node, target) ||
-            $.isSame(colorpicker._menuNode, target) ||
-            $.hasDescendent(colorpicker._menuNode, target)
+            $.isSame(colorpicker._node, e.target) ||
+            $.isSame(colorpicker._menuNode, e.target) ||
+            $.hasDescendent(colorpicker._menuNode, e.target)
         ) {
             continue;
         }

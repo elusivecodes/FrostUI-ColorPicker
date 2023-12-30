@@ -48,19 +48,6 @@ export function _events() {
             case 'ArrowUp':
                 this._values.brightness = Math.min(100, this._values.brightness + 1);
                 break;
-            case 'Tab':
-                if (
-                    e.shiftKey &&
-                    !this._options.inline &&
-                    !this._options.modal
-                ) {
-                    e.preventDefault();
-
-                    $.focus(this._node);
-
-                    this.hide();
-                }
-                return;
             default:
                 return;
         }
@@ -108,19 +95,6 @@ export function _events() {
             case 'ArrowUp':
                 this._values.hue = Math.min(360, this._values.hue + 1);
                 break;
-            case 'Tab':
-                if (
-                    !this._options.modal &&
-                    !this._options.alpha
-                ) {
-                    $.focus(this._node);
-
-                    $.setAttribute(this._saturationGuide, { tabindex: -1 });
-                    $.setAttribute(this._hueGuide, { tabindex: -1 });
-
-                    this.hide();
-                }
-                return;
             default:
                 return;
         }
@@ -169,21 +143,6 @@ export function _events() {
                 case 'ArrowUp':
                     this._values.alpha = Math.min(1, this._values.alpha + .01);
                     break;
-                case 'Tab':
-                    if (
-                        !e.shiftKey &&
-                        !this._options.inline &&
-                        !this._options.modal
-                    ) {
-                        $.focus(this._node);
-
-                        $.setAttribute(this._saturationGuide, { tabindex: -1 });
-                        $.setAttribute(this._hueGuide, { tabindex: -1 });
-                        $.setAttribute(this._alphaGuide, { tabindex: -1 });
-
-                        this.hide();
-                    }
-                    return;
                 default:
                     return;
             }
@@ -231,6 +190,22 @@ export function _events() {
 
                 this.hide();
                 break;
+            case 'Tab':
+                if (!this._options.modal && !this._options.inline) {
+                    const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+                    const focusIndex = $.indexOf(focusableNodes, e.target);
+
+                    if (e.shiftKey && focusIndex === 0) {
+                        e.preventDefault();
+
+                        $.focus(this._node);
+                    } else if (!e.shiftKey && focusIndex === focusableNodes.length - 1) {
+                        $.focus(this._node);
+
+                        this.hide();
+                    }
+                }
+                break;
         }
     });
 
@@ -241,6 +216,17 @@ export function _events() {
     $.addEvent(this._menuNode, 'click.ui.colorpicker', (e) => {
         // prevent menu node from closing modal
         e.stopPropagation();
+    });
+
+    $.addEvent(this._node, 'input.ui.colorpicker', (_) => {
+        const value = $.getValue(this._node);
+        const color = parseColor(value);
+
+        if (color) {
+            this._color = color;
+            this._updateAttributes();
+            this._refresh();
+        }
     });
 
     $.addEvent(this._node, 'click.ui.colorpicker', (_) => {

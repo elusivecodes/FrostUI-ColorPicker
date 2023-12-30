@@ -18,11 +18,11 @@ export function _render() {
     });
     $.append(this._container, this._saturation);
 
-    this._saturationGuide = $.create('button', {
+    this._saturationGuide = $.create('span', {
         class: this.constructor.classes.guide,
         attributes: {
-            'type': 'button',
             'role': 'slider',
+            'tabindex': 0,
             'aria-label': this.constructor.lang.color,
         },
     });
@@ -33,11 +33,11 @@ export function _render() {
     });
     $.append(this._container, this._hue);
 
-    this._hueGuide = $.create('button', {
+    this._hueGuide = $.create('span', {
         class: this.constructor.classes.guide,
         attributes: {
-            'type': 'button',
             'role': 'slider',
+            'tabindex': 0,
             'aria-label': this.constructor.lang.hue,
         },
     });
@@ -54,11 +54,11 @@ export function _render() {
         });
         $.append(this._alpha, this._alphaColor);
 
-        this._alphaGuide = $.create('button', {
+        this._alphaGuide = $.create('span', {
             class: this.constructor.classes.guide,
             attributes: {
-                'type': 'button',
                 'role': 'slider',
+                'tabindex': 0,
                 'aria-label': this.constructor.lang.alpha,
             },
         });

@@ -155,6 +155,7 @@
             }
 
             $.removeEvent(this._node, 'change.ui.colorpicker');
+            $.removeEvent(this._node, 'input.ui.colorpicker');
             $.removeEvent(this._node, 'click.ui.colorpicker');
             $.removeEvent(this._node, 'focus.ui.colorpicker');
             $.removeEvent(this._node, 'keydown.ui.colorpicker');
@@ -228,6 +229,9 @@
 
             $.setDataset(this._menuNode, { uiAnimating: 'out' });
 
+            const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+            $.setAttribute(focusableNodes, { tabindex: -1 });
+
             $.fadeOut(this._menuNode, {
                 duration: this._options.duration,
             }).then((_) => {
@@ -300,12 +304,8 @@
 
             $.setDataset(this._menuNode, { uiAnimating: 'in' });
 
-            $.removeAttribute(this._saturationGuide, 'tabindex');
-            $.removeAttribute(this._hueGuide, 'tabindex');
-
-            if (this._options.alpha) {
-                $.removeAttribute(this._alphaGuide, 'tabindex');
-            }
+            const focusableNodes = $.find('[tabindex="-1"]', this._menuNode);
+            $.setAttribute(focusableNodes, { tabindex: 0 });
 
             if (this._options.appendTo) {
                 $.append(this._options.appendTo, this._menuNode);
@@ -404,19 +404,6 @@
                 case 'ArrowUp':
                     this._values.brightness = Math.min(100, this._values.brightness + 1);
                     break;
-                case 'Tab':
-                    if (
-                        e.shiftKey &&
-                        !this._options.inline &&
-                        !this._options.modal
-                    ) {
-                        e.preventDefault();
-
-                        $.focus(this._node);
-
-                        this.hide();
-                    }
-                    return;
                 default:
                     return;
             }
@@ -464,19 +451,6 @@
                 case 'ArrowUp':
                     this._values.hue = Math.min(360, this._values.hue + 1);
                     break;
-                case 'Tab':
-                    if (
-                        !this._options.modal &&
-                        !this._options.alpha
-                    ) {
-                        $.focus(this._node);
-
-                        $.setAttribute(this._saturationGuide, { tabindex: -1 });
-                        $.setAttribute(this._hueGuide, { tabindex: -1 });
-
-                        this.hide();
-                    }
-                    return;
                 default:
                     return;
             }
@@ -525,21 +499,6 @@
                     case 'ArrowUp':
                         this._values.alpha = Math.min(1, this._values.alpha + .01);
                         break;
-                    case 'Tab':
-                        if (
-                            !e.shiftKey &&
-                            !this._options.inline &&
-                            !this._options.modal
-                        ) {
-                            $.focus(this._node);
-
-                            $.setAttribute(this._saturationGuide, { tabindex: -1 });
-                            $.setAttribute(this._hueGuide, { tabindex: -1 });
-                            $.setAttribute(this._alphaGuide, { tabindex: -1 });
-
-                            this.hide();
-                        }
-                        return;
                     default:
                         return;
                 }
@@ -587,6 +546,22 @@
 
                     this.hide();
                     break;
+                case 'Tab':
+                    if (!this._options.modal && !this._options.inline) {
+                        const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+                        const focusIndex = $.indexOf(focusableNodes, e.target);
+
+                        if (e.shiftKey && focusIndex === 0) {
+                            e.preventDefault();
+
+                            $.focus(this._node);
+                        } else if (!e.shiftKey && focusIndex === focusableNodes.length - 1) {
+                            $.focus(this._node);
+
+                            this.hide();
+                        }
+                    }
+                    break;
             }
         });
 
@@ -597,6 +572,17 @@
         $.addEvent(this._menuNode, 'click.ui.colorpicker', (e) => {
             // prevent menu node from closing modal
             e.stopPropagation();
+        });
+
+        $.addEvent(this._node, 'input.ui.colorpicker', (_) => {
+            const value = $.getValue(this._node);
+            const color = parseColor(value);
+
+            if (color) {
+                this._color = color;
+                this._updateAttributes();
+                this._refresh();
+            }
         });
 
         $.addEvent(this._node, 'click.ui.colorpicker', (_) => {
@@ -901,7 +887,7 @@
             .setHue(this._values.hue)
             .setSaturation(this._values.saturation);
 
-        this._setColor(color, false);
+        this._setColor(color, { updateAttributes: false });
     }
     /**
      * Update the hue for an X,Y position.
@@ -945,11 +931,11 @@
         });
         $.append(this._container, this._saturation);
 
-        this._saturationGuide = $.create('button', {
+        this._saturationGuide = $.create('span', {
             class: this.constructor.classes.guide,
             attributes: {
-                'type': 'button',
                 'role': 'slider',
+                'tabindex': 0,
                 'aria-label': this.constructor.lang.color,
             },
         });
@@ -960,11 +946,11 @@
         });
         $.append(this._container, this._hue);
 
-        this._hueGuide = $.create('button', {
+        this._hueGuide = $.create('span', {
             class: this.constructor.classes.guide,
             attributes: {
-                'type': 'button',
                 'role': 'slider',
+                'tabindex': 0,
                 'aria-label': this.constructor.lang.hue,
             },
         });
@@ -981,11 +967,11 @@
             });
             $.append(this._alpha, this._alphaColor);
 
-            this._alphaGuide = $.create('button', {
+            this._alphaGuide = $.create('span', {
                 class: this.constructor.classes.guide,
                 attributes: {
-                    'type': 'button',
                     'role': 'slider',
+                    'tabindex': 0,
                     'aria-label': this.constructor.lang.alpha,
                 },
             });
@@ -1174,8 +1160,7 @@
     ui.initComponent('colorpicker', ColorPicker);
 
     // ColorPicker events
-    $.addEvent(document, 'click.ui.colorpicker', (e) => {
-        const target = ui.getClickTarget(e);
+    $.addEvent(document, 'mousedown.ui.colorpicker', (e) => {
         const nodes = $.find('.colorpicker:not(.colorpicker-inline):not(.colorpicker-modal)');
 
         for (const node of nodes) {
@@ -1183,9 +1168,9 @@
             const colorpicker = ColorPicker.init(input);
 
             if (
-                $.isSame(colorpicker._node, target) ||
-                $.isSame(colorpicker._menuNode, target) ||
-                $.hasDescendent(colorpicker._menuNode, target)
+                $.isSame(colorpicker._node, e.target) ||
+                $.isSame(colorpicker._menuNode, e.target) ||
+                $.hasDescendent(colorpicker._menuNode, e.target)
             ) {
                 continue;
             }

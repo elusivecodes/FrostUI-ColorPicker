@@ -103,6 +103,7 @@ export default class ColorPicker extends BaseComponent {
         }
 
         $.removeEvent(this._node, 'change.ui.colorpicker');
+        $.removeEvent(this._node, 'input.ui.colorpicker');
         $.removeEvent(this._node, 'click.ui.colorpicker');
         $.removeEvent(this._node, 'focus.ui.colorpicker');
         $.removeEvent(this._node, 'keydown.ui.colorpicker');
@@ -176,6 +177,9 @@ export default class ColorPicker extends BaseComponent {
 
         $.setDataset(this._menuNode, { uiAnimating: 'out' });
 
+        const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+        $.setAttribute(focusableNodes, { tabindex: -1 });
+
         $.fadeOut(this._menuNode, {
             duration: this._options.duration,
         }).then((_) => {
@@ -248,12 +252,8 @@ export default class ColorPicker extends BaseComponent {
 
         $.setDataset(this._menuNode, { uiAnimating: 'in' });
 
-        $.removeAttribute(this._saturationGuide, 'tabindex');
-        $.removeAttribute(this._hueGuide, 'tabindex');
-
-        if (this._options.alpha) {
-            $.removeAttribute(this._alphaGuide, 'tabindex');
-        }
+        const focusableNodes = $.find('[tabindex="-1"]', this._menuNode);
+        $.setAttribute(focusableNodes, { tabindex: 0 });
 
         if (this._options.appendTo) {
             $.append(this._options.appendTo, this._menuNode);

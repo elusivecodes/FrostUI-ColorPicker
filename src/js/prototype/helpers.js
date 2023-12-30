@@ -187,7 +187,7 @@ export function _updateColor() {
         .setHue(this._values.hue)
         .setSaturation(this._values.saturation);
 
-    this._setColor(color, false);
+    this._setColor(color, { updateAttributes: false });
 };
 
 /**
