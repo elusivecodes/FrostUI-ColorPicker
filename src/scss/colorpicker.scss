@@ -39,8 +39,8 @@
         transform: translate(-50%, -50%);
 
         &:focus-visible {
-            box-shadow: $colorpicker-saturation-guide-focus-box-shadow;
             outline: 0;
+            box-shadow: $colorpicker-saturation-guide-focus-box-shadow;
         }
     }
 }
@@ -104,8 +104,8 @@
         transform: translateY(-50%);
 
         &:focus-visible {
-            box-shadow: $colorpicker-hue-alpha-guide-focus-box-shadow;
             outline: 0;
+            box-shadow: $colorpicker-hue-alpha-guide-focus-box-shadow;
         }
     }
 }
@@ -149,5 +149,14 @@
         width: 100%;
         height: initial;
         padding-top: 100%;
+    }
+
+    .colorpicker-hue,
+    .colorpicker-alpha {
+        height: $colorpicker-modal-hue-alpha-size;
+    }
+
+    .colorpicker-bar {
+        height: $colorpicker-modal-bar-height;
     }
 }

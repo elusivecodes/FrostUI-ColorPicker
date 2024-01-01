@@ -74,23 +74,31 @@ export function _render() {
     $.append(this._preview, this._previewColor);
 
     if (this._options.horizontal) {
+        const spacing = this._options.modal ?
+            this.constructor.classes.spacingModal :
+            this.constructor.classes.spacingHorizontal;
+
         $.addClass(this._menuNode, this.constructor.classes.menuHorizontal);
         $.addClass(this._container, this.constructor.classes.containerHorizontal);
-        $.addClass(this._hue, this.constructor.classes.spacingHorizontal);
+        $.addClass(this._hue, spacing);
 
         if (this._options.alpha) {
-            $.addClass(this._alpha, this.constructor.classes.spacingHorizontal);
+            $.addClass(this._alpha, spacing);
         }
+
+        $.addClass(this._preview, spacing);
     } else {
         $.addClass(this._saturation, this.constructor.classes.spacingVertical);
 
         if (this._options.alpha) {
             $.addClass(this._hue, this.constructor.classes.spacingVertical);
         }
+
+        $.addClass(this._preview, this.constructor.classes.spacingHorizontal);
     }
 
     if (this._options.modal) {
-        $.addClass(this._menuNode, 'colorpicker-modal');
+        $.addClass(this._menuNode, this.constructor.classes.menuModal);
     } else if (this._options.inline) {
         $.addClass(this._menuNode, this.constructor.classes.menuInline);
 

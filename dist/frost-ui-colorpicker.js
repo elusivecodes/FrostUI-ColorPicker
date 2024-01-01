@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fr0st/query'), require('@fr0st/ui'), require('@fr0st/color')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fr0st/query', '@fr0st/ui', '@fr0st/color'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.UI = global.UI || {}, global.fQuery, global.UI, global.Color));
-})(this, (function (exports, $, ui, Color$1) { 'use strict';
+})(this, (function (exports, $, ui, Color) { 'use strict';
 
     /**
      * Format a number as a percent string.
@@ -44,12 +44,12 @@
             return null;
         }
 
-        if (color instanceof Color$1) {
+        if (color instanceof Color) {
             return color;
         }
 
         try {
-            return Color$1.fromString(color);
+            return Color.fromString(color);
         } catch (e) {
             return null;
         }
@@ -79,15 +79,13 @@
             }
 
             if (!this._defaultColor) {
-                this._defaultColor = new Color$1();
+                this._defaultColor = new Color();
             }
 
             this._color = parseColor(value);
 
-            let validColor = true;
-            if (!this._color) {
+            if (!this._color && value && !this._options.keepInvalid) {
                 this._color = this._defaultColor;
-                validColor = false;
             }
 
             if (this._options.inline) {
@@ -105,7 +103,7 @@
                 this._inputGroupColor = $.findOne('.input-group-color', inputGroup);
             }
 
-            if (validColor || (value && !this._options.keepInvalid)) {
+            if (this._color) {
                 const newValue = this._getString(this._color);
                 $.setValue(this._node, newValue);
             }
@@ -162,7 +160,6 @@
             $.removeEvent(this._node, 'keyup.ui.colorpicker');
 
             if (this._inputGroupColor) {
-                $.removeEvent(this._inputGroupColor, 'mousedown.ui.colorpicker');
                 $.removeEvent(this._inputGroupColor, 'click.ui.colorpicker');
             }
 
@@ -200,7 +197,7 @@
 
         /**
          * Get the current color.
-         * @return {Color} The current color.
+         * @return {Color|null} The current color.
          */
         getColor() {
             return this._color;
@@ -250,9 +247,14 @@
 
         /**
          * Set the current color.
-         * @param {string|Color} color The input color.
+         * @param {string|Color|null} color The new color.
          */
         setColor(color) {
+            if (color === null) {
+                this._setColor(color);
+                return;
+            }
+
             color = parseColor(color);
 
             if (!color) {
@@ -282,7 +284,13 @@
                 if (this._options.appendTo) {
                     $.append(this._options.appendTo, this._modal);
                 } else {
-                    $.after(this._node, this._modal);
+                    const parentModal = $.closest(this._node, '.modal').shift();
+
+                    if (parentModal) {
+                        $.after(parentModal, this._modal);
+                    } else {
+                        $.after(this._node, this._modal);
+                    }
                 }
 
                 const modal = ui.Modal.init(this._modal);
@@ -522,7 +530,7 @@
             } else if (!this._options.keepInvalid && value) {
                 this._setColor(this._color);
             } else {
-                this._color = this._defaultColor;
+                this._color = null;
                 this._updateAttributes();
                 this._refresh();
             }
@@ -651,11 +659,6 @@
         });
 
         if (this._inputGroupColor) {
-            $.addEvent(this._inputGroupColor, 'mousedown.ui.colorpicker', (e) => {
-                // prevent group color addon from triggering blur event
-                e.preventDefault();
-            });
-
             $.addEvent(this._inputGroupColor, 'click.ui.colorpicker', (_) => {
                 $.focus(this._node);
                 this.toggle();
@@ -666,7 +669,7 @@
      * Attach events for the Modal.
      */
     function _eventsModal() {
-        let originalValue;
+        let originalColor;
         this._keepColor = false;
 
         $.addEvent(this._modal, 'show.ui.modal', (_) => {
@@ -674,7 +677,7 @@
                 return false;
             }
 
-            originalValue = $.getValue(this._node);
+            originalColor = this._color;
         });
 
         $.addEvent(this._modal, 'shown.ui.modal', (_) => {
@@ -691,13 +694,20 @@
 
             this._activeTarget = null;
 
-            if (!this._keepColor) {
-                $.setValue(this._node, originalValue);
-                $.triggerEvent(this._node, 'change.ui.colorpicker');
+            this._values.saturation = 0;
+            this._values.hue = 0;
+
+            if (this._keepColor) {
+                this._setColor(this._color);
             }
         });
 
         $.addEvent(this._modal, 'hidden.ui.modal', (_) => {
+            if (!this._keepColor) {
+                this._setColor(originalColor);
+                originalColor = null;
+            }
+
             this._keepColor = false;
             $.detach(this._modal);
             $.triggerEvent(this._node, 'hidden.ui.colorpicker');
@@ -710,10 +720,14 @@
 
     /**
      * Get the color string.
-     * @param {Color} color The Color.
+     * @param {Color|null} color The Color.
      * @return {string} The color string.
      */
     function _getString(color) {
+        if (!color) {
+            return '';
+        }
+
         switch (this._options.format) {
             case 'hex':
                 return color.toHexString();
@@ -734,8 +748,10 @@
     }
     /**
      * Refresh the ColorPicker.
+     * @param {object} options The options for setting the color.
+     * @param {Boolean} [options.updateAttributes=true] Whether to update the input group.
      */
-    function _refresh() {
+    function _refresh({ updateInputGroup = true } = {}) {
         const saturationColor = Color.fromHSV(this._values.hue, 100, 100);
         $.setStyle(this._saturation, {
             backgroundColor: saturationColor,
@@ -782,13 +798,15 @@
             });
         }
 
+        const newColor = Color.fromHSV(this._values.hue, this._values.saturation, this._values.brightness, this._values.alpha);
+
         $.setStyle(this._previewColor, {
-            backgroundColor: this._color,
+            backgroundColor: newColor,
         });
 
-        if (this._inputGroupColor) {
+        if (updateInputGroup && this._inputGroupColor) {
             $.setStyle(this._inputGroupColor, {
-                backgroundColor: this._color,
+                backgroundColor: newColor,
             });
         }
     }
@@ -811,8 +829,10 @@
      * @param {Color} color The new color.
      * @param {object} options The options for setting the color.
      * @param {Boolean} [options.updateAttributes=true] Whether to update the attributes.
+     * @param {Boolean} [options.updateInputGroup=true] Whether to update the input group.
+     * @param {Boolean} [options.updateValue=true] Whether to update the value.
      */
-    function _setColor(color, { updateAttributes = true } = {}) {
+    function _setColor(color, { updateAttributes = true, updateInputGroup = true, updateValue = true } = {}) {
         if (!this._isEditable()) {
             return;
         }
@@ -827,9 +847,9 @@
             this._updateAttributes();
         }
 
-        this._refresh();
+        this._refresh({ updateInputGroup });
 
-        if (oldValue === newValue) {
+        if (!updateValue || oldValue === newValue) {
             return;
         }
 
@@ -856,24 +876,27 @@
             $.percentY(this._alpha, y, { offset: true });
 
         this._values.alpha = 1 - (percent / 100);
+
         this._updateColor();
     }
     /**
      * Update the color attributes.
      */
     function _updateAttributes() {
+        const color = this._color || this._defaultColor;
+
         this._values.alpha = this._options.alpha ?
-            this._color.getAlpha() :
+            color.getAlpha() :
             1;
 
-        this._values.brightness = this._color.getBrightness();
+        this._values.brightness = color.getBrightness();
 
         if (this._values.brightness > 0) {
-            this._values.saturation = this._color.getSaturation();
+            this._values.saturation = color.getSaturation();
         }
 
         if (this._values.brightness > 0 && this._values.saturation > 0) {
-            this._values.hue = this._color.getHue();
+            this._values.hue = color.getHue();
         }
     }
     /**
@@ -881,13 +904,17 @@
      * Update the color from attributes.
      */
     function _updateColor() {
-        const color = this.getColor()
+        const color = (this._color || this._defaultColor)
             .setAlpha(this._values.alpha)
             .setBrightness(this._values.brightness)
-            .setHue(this._values.hue)
-            .setSaturation(this._values.saturation);
+            .setSaturation(this._values.saturation)
+            .setHue(this._values.hue);
 
-        this._setColor(color, { updateAttributes: false });
+        this._setColor(color, {
+            updateAttributes: false,
+            updateInputGroup: !this._options.modal,
+            updateValue: !this._options.modal,
+        });
     }
     /**
      * Update the hue for an X,Y position.
@@ -900,6 +927,7 @@
             $.percentY(this._hue, y, { offset: true });
 
         this._values.hue = (100 - percent) * 3.6;
+
         this._updateColor();
     }
     /**
@@ -910,6 +938,7 @@
     function _updateSaturation(x, y) {
         this._values.brightness = 100 - $.percentY(this._saturation, y, { offset: true });
         this._values.saturation = $.percentX(this._saturation, x, { offset: true });
+
         this._updateColor();
     }
 
@@ -987,23 +1016,31 @@
         $.append(this._preview, this._previewColor);
 
         if (this._options.horizontal) {
+            const spacing = this._options.modal ?
+                this.constructor.classes.spacingModal :
+                this.constructor.classes.spacingHorizontal;
+
             $.addClass(this._menuNode, this.constructor.classes.menuHorizontal);
             $.addClass(this._container, this.constructor.classes.containerHorizontal);
-            $.addClass(this._hue, this.constructor.classes.spacingHorizontal);
+            $.addClass(this._hue, spacing);
 
             if (this._options.alpha) {
-                $.addClass(this._alpha, this.constructor.classes.spacingHorizontal);
+                $.addClass(this._alpha, spacing);
             }
+
+            $.addClass(this._preview, spacing);
         } else {
             $.addClass(this._saturation, this.constructor.classes.spacingVertical);
 
             if (this._options.alpha) {
                 $.addClass(this._hue, this.constructor.classes.spacingVertical);
             }
+
+            $.addClass(this._preview, this.constructor.classes.spacingHorizontal);
         }
 
         if (this._options.modal) {
-            $.addClass(this._menuNode, 'colorpicker-modal');
+            $.addClass(this._menuNode, this.constructor.classes.menuModal);
         } else if (this._options.inline) {
             $.addClass(this._menuNode, this.constructor.classes.menuInline);
 
@@ -1112,6 +1149,7 @@
         menu: 'colorpicker',
         menuHorizontal: 'colorpicker-horizontal',
         menuInline: 'colorpicker-inline',
+        menuModal: 'colorpicker-modal',
         menuPadding: 'p-2',
         modal: 'modal',
         modalBody: 'modal-body',
@@ -1120,9 +1158,10 @@
         modalBtnSecondary: 'btn btn-secondary ripple ms-2',
         modalContent: 'modal-content',
         modalDialog: 'modal-dialog modal-sm',
-        preview: 'colorpicker-bar colorpicker-preview mt-2',
+        preview: 'colorpicker-bar colorpicker-preview',
         saturation: 'colorpicker-saturation',
         spacingHorizontal: 'mt-2',
+        spacingModal: 'mt-3',
         spacingVertical: 'me-2',
     };
 

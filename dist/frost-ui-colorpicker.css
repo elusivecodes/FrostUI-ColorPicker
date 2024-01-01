@@ -38,8 +38,8 @@
   transform: translate(-50%, -50%);
 }
 .colorpicker-saturation .colorpicker-guide:focus-visible {
-  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
   outline: 0;
+  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
 }
 
 .colorpicker-hue {
@@ -68,7 +68,7 @@
 .colorpicker-bar {
   position: relative;
   max-width: 100%;
-  height: 1rem;
+  height: 1.5rem;
   box-shadow: 0 0 0 var(--ui-border-width) fade(var(--ui-body-color-rgb), 0.2);
 }
 .colorpicker-bar div {
@@ -83,7 +83,7 @@
 .colorpicker-alpha {
   position: relative;
   z-index: 1;
-  width: 25px;
+  width: 1.5rem;
   height: 200px;
   cursor: row-resize;
 }
@@ -102,8 +102,8 @@
 }
 .colorpicker-hue .colorpicker-guide:focus-visible,
 .colorpicker-alpha .colorpicker-guide:focus-visible {
-  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
   outline: 0;
+  box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
 }
 
 .colorpicker-horizontal .colorpicker-hue {
@@ -112,7 +112,7 @@
 .colorpicker-horizontal .colorpicker-hue,
 .colorpicker-horizontal .colorpicker-alpha {
   width: 100%;
-  height: 25px;
+  height: 1.5rem;
   cursor: col-resize;
 }
 .colorpicker-horizontal .colorpicker-hue .colorpicker-guide,
@@ -141,6 +141,13 @@
   width: 100%;
   height: initial;
   padding-top: 100%;
+}
+.colorpicker-modal .colorpicker-hue,
+.colorpicker-modal .colorpicker-alpha {
+  height: 2rem;
+}
+.colorpicker-modal .colorpicker-bar {
+  height: 2rem;
 }
 
 /*# sourceMappingURL=frost-ui-colorpicker.css.map */

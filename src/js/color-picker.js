@@ -32,10 +32,8 @@ export default class ColorPicker extends BaseComponent {
 
         this._color = parseColor(value);
 
-        let validColor = true;
-        if (!this._color) {
+        if (!this._color && value && !this._options.keepInvalid) {
             this._color = this._defaultColor;
-            validColor = false;
         }
 
         if (this._options.inline) {
@@ -53,7 +51,7 @@ export default class ColorPicker extends BaseComponent {
             this._inputGroupColor = $.findOne('.input-group-color', inputGroup);
         }
 
-        if (validColor || (value && !this._options.keepInvalid)) {
+        if (this._color) {
             const newValue = this._getString(this._color);
             $.setValue(this._node, newValue);
         }
@@ -110,7 +108,6 @@ export default class ColorPicker extends BaseComponent {
         $.removeEvent(this._node, 'keyup.ui.colorpicker');
 
         if (this._inputGroupColor) {
-            $.removeEvent(this._inputGroupColor, 'mousedown.ui.colorpicker');
             $.removeEvent(this._inputGroupColor, 'click.ui.colorpicker');
         }
 
@@ -148,7 +145,7 @@ export default class ColorPicker extends BaseComponent {
 
     /**
      * Get the current color.
-     * @return {Color} The current color.
+     * @return {Color|null} The current color.
      */
     getColor() {
         return this._color;
@@ -198,9 +195,14 @@ export default class ColorPicker extends BaseComponent {
 
     /**
      * Set the current color.
-     * @param {string|Color} color The input color.
+     * @param {string|Color|null} color The new color.
      */
     setColor(color) {
+        if (color === null) {
+            this._setColor(color);
+            return;
+        }
+
         color = parseColor(color);
 
         if (!color) {
@@ -230,7 +232,13 @@ export default class ColorPicker extends BaseComponent {
             if (this._options.appendTo) {
                 $.append(this._options.appendTo, this._modal);
             } else {
-                $.after(this._node, this._modal);
+                const parentModal = $.closest(this._node, '.modal').shift();
+
+                if (parentModal) {
+                    $.after(parentModal, this._modal);
+                } else {
+                    $.after(this._node, this._modal);
+                }
             }
 
             const modal = Modal.init(this._modal);

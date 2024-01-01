@@ -166,7 +166,7 @@ export function _events() {
         } else if (!this._options.keepInvalid && value) {
             this._setColor(this._color);
         } else {
-            this._color = this._defaultColor;
+            this._color = null;
             this._updateAttributes();
             this._refresh();
         }
@@ -295,11 +295,6 @@ export function _events() {
     });
 
     if (this._inputGroupColor) {
-        $.addEvent(this._inputGroupColor, 'mousedown.ui.colorpicker', (e) => {
-            // prevent group color addon from triggering blur event
-            e.preventDefault();
-        });
-
         $.addEvent(this._inputGroupColor, 'click.ui.colorpicker', (_) => {
             $.focus(this._node);
             this.toggle();
@@ -311,7 +306,7 @@ export function _events() {
  * Attach events for the Modal.
  */
 export function _eventsModal() {
-    let originalValue;
+    let originalColor;
     this._keepColor = false;
 
     $.addEvent(this._modal, 'show.ui.modal', (_) => {
@@ -319,7 +314,7 @@ export function _eventsModal() {
             return false;
         }
 
-        originalValue = $.getValue(this._node);
+        originalColor = this._color;
     });
 
     $.addEvent(this._modal, 'shown.ui.modal', (_) => {
@@ -336,13 +331,20 @@ export function _eventsModal() {
 
         this._activeTarget = null;
 
-        if (!this._keepColor) {
-            $.setValue(this._node, originalValue);
-            $.triggerEvent(this._node, 'change.ui.colorpicker');
+        this._values.saturation = 0;
+        this._values.hue = 0;
+
+        if (this._keepColor) {
+            this._setColor(this._color);
         }
     });
 
     $.addEvent(this._modal, 'hidden.ui.modal', (_) => {
+        if (!this._keepColor) {
+            this._setColor(originalColor);
+            originalColor = null;
+        }
+
         this._keepColor = false;
         $.detach(this._modal);
         $.triggerEvent(this._node, 'hidden.ui.colorpicker');

@@ -1,12 +1,17 @@
+import Color from '@fr0st/color';
 import $ from '@fr0st/query';
 import { formatPercent } from './../helpers.js';
 
 /**
  * Get the color string.
- * @param {Color} color The Color.
+ * @param {Color|null} color The Color.
  * @return {string} The color string.
  */
 export function _getString(color) {
+    if (!color) {
+        return '';
+    }
+
     switch (this._options.format) {
         case 'hex':
             return color.toHexString();
@@ -29,8 +34,10 @@ export function _isEditable() {
 
 /**
  * Refresh the ColorPicker.
+ * @param {object} options The options for setting the color.
+ * @param {Boolean} [options.updateAttributes=true] Whether to update the input group.
  */
-export function _refresh() {
+export function _refresh({ updateInputGroup = true } = {}) {
     const saturationColor = Color.fromHSV(this._values.hue, 100, 100);
     $.setStyle(this._saturation, {
         backgroundColor: saturationColor,
@@ -77,13 +84,15 @@ export function _refresh() {
         });
     }
 
+    const newColor = Color.fromHSV(this._values.hue, this._values.saturation, this._values.brightness, this._values.alpha);
+
     $.setStyle(this._previewColor, {
-        backgroundColor: this._color,
+        backgroundColor: newColor,
     });
 
-    if (this._inputGroupColor) {
+    if (updateInputGroup && this._inputGroupColor) {
         $.setStyle(this._inputGroupColor, {
-            backgroundColor: this._color,
+            backgroundColor: newColor,
         });
     }
 };
@@ -108,8 +117,10 @@ export function _refreshDisabled() {
  * @param {Color} color The new color.
  * @param {object} options The options for setting the color.
  * @param {Boolean} [options.updateAttributes=true] Whether to update the attributes.
+ * @param {Boolean} [options.updateInputGroup=true] Whether to update the input group.
+ * @param {Boolean} [options.updateValue=true] Whether to update the value.
  */
-export function _setColor(color, { updateAttributes = true } = {}) {
+export function _setColor(color, { updateAttributes = true, updateInputGroup = true, updateValue = true } = {}) {
     if (!this._isEditable()) {
         return;
     }
@@ -124,9 +135,9 @@ export function _setColor(color, { updateAttributes = true } = {}) {
         this._updateAttributes();
     }
 
-    this._refresh();
+    this._refresh({ updateInputGroup });
 
-    if (oldValue === newValue) {
+    if (!updateValue || oldValue === newValue) {
         return;
     }
 
@@ -154,6 +165,7 @@ export function _updateAlpha(x, y) {
         $.percentY(this._alpha, y, { offset: true });
 
     this._values.alpha = 1 - (percent / 100);
+
     this._updateColor();
 };
 
@@ -161,18 +173,20 @@ export function _updateAlpha(x, y) {
  * Update the color attributes.
  */
 export function _updateAttributes() {
+    const color = this._color || this._defaultColor;
+
     this._values.alpha = this._options.alpha ?
-        this._color.getAlpha() :
+        color.getAlpha() :
         1;
 
-    this._values.brightness = this._color.getBrightness();
+    this._values.brightness = color.getBrightness();
 
     if (this._values.brightness > 0) {
-        this._values.saturation = this._color.getSaturation();
+        this._values.saturation = color.getSaturation();
     }
 
     if (this._values.brightness > 0 && this._values.saturation > 0) {
-        this._values.hue = this._color.getHue();
+        this._values.hue = color.getHue();
     }
 };
 
@@ -181,13 +195,17 @@ export function _updateAttributes() {
  * Update the color from attributes.
  */
 export function _updateColor() {
-    const color = this.getColor()
+    const color = (this._color || this._defaultColor)
         .setAlpha(this._values.alpha)
         .setBrightness(this._values.brightness)
-        .setHue(this._values.hue)
-        .setSaturation(this._values.saturation);
+        .setSaturation(this._values.saturation)
+        .setHue(this._values.hue);
 
-    this._setColor(color, { updateAttributes: false });
+    this._setColor(color, {
+        updateAttributes: false,
+        updateInputGroup: !this._options.modal,
+        updateValue: !this._options.modal,
+    });
 };
 
 /**
@@ -201,6 +219,7 @@ export function _updateHue(x, y) {
         $.percentY(this._hue, y, { offset: true });
 
     this._values.hue = (100 - percent) * 3.6;
+
     this._updateColor();
 };
 
@@ -212,5 +231,6 @@ export function _updateHue(x, y) {
 export function _updateSaturation(x, y) {
     this._values.brightness = 100 - $.percentY(this._saturation, y, { offset: true });
     this._values.saturation = $.percentX(this._saturation, x, { offset: true });
+
     this._updateColor();
 };

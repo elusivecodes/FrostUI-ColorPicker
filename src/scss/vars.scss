@@ -14,7 +14,7 @@ $colorpicker-saturation-guide-border-radius: 50% !default;
 $colorpicker-saturation-guide-box-shadow: 0 0 0 var(--ui-border-width) rgba(var(--ui-body-bg-rgb), .8) !default;
 $colorpicker-saturation-guide-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color) !default;
 
-$colorpicker-hue-alpha-size: 25px !default;
+$colorpicker-hue-alpha-size: 1.5rem !default;
 $colorpicker-hue-alpha-cursor: row-resize !default;
 $colorpicker-horizontal-hue-alpha-cursor: col-resize !default;
 $colorpicker-hue-alpha-guide-size: 4px !default;
@@ -28,8 +28,11 @@ $colorpicker-horizontal-hue-background: linear-gradient(to left, #f00 0%, #ff800
 $colorpicker-alpha-background: linear-gradient(45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1) 0), linear-gradient(45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1) 0), #fff !default;
 $colorpicker-alpha-background-size: 10px !default;
 
-$colorpicker-bar-height: 1rem !default;
+$colorpicker-bar-height: 1.5rem !default;
 $colorpicker-bar-box-shadow: 0 0 0 var(--ui-border-width) fade(var(--ui-body-color-rgb), .2) !default;
+
+$colorpicker-modal-hue-alpha-size: 2rem !default;
+$colorpicker-modal-bar-height: 2rem !default;
 
 $colorpicker-disabled-opacity: var(--ui-disabled-opacity) !default;
 

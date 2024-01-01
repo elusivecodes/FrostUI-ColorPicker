@@ -38,6 +38,7 @@ ColorPicker.classes = {
     menu: 'colorpicker',
     menuHorizontal: 'colorpicker-horizontal',
     menuInline: 'colorpicker-inline',
+    menuModal: 'colorpicker-modal',
     menuPadding: 'p-2',
     modal: 'modal',
     modalBody: 'modal-body',
@@ -46,9 +47,10 @@ ColorPicker.classes = {
     modalBtnSecondary: 'btn btn-secondary ripple ms-2',
     modalContent: 'modal-content',
     modalDialog: 'modal-dialog modal-sm',
-    preview: 'colorpicker-bar colorpicker-preview mt-2',
+    preview: 'colorpicker-bar colorpicker-preview',
     saturation: 'colorpicker-saturation',
     spacingHorizontal: 'mt-2',
+    spacingModal: 'mt-3',
     spacingVertical: 'me-2',
 };
 
