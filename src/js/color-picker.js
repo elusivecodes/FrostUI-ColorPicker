@@ -32,10 +32,6 @@ export default class ColorPicker extends BaseComponent {
 
         this._color = parseColor(value);
 
-        if (!this._color && value && !this._options.keepInvalid) {
-            this._color = this._defaultColor;
-        }
-
         if (this._options.inline) {
             this._options.modal = false;
         } else if (!this._options.modal && this._options.mobileModal) {
@@ -51,7 +47,7 @@ export default class ColorPicker extends BaseComponent {
             this._inputGroupColor = $.findOne('.input-group-color', inputGroup);
         }
 
-        if (this._color) {
+        if (this._color || (value && !this._options.keepInvalid)) {
             const newValue = this._getString(this._color);
             $.setValue(this._node, newValue);
         }
@@ -64,8 +60,6 @@ export default class ColorPicker extends BaseComponent {
             this._eventsModal();
         }
 
-        $.setData(this._menuNode, { input: this._node });
-
         this._values = {
             alpha: 1,
             brightness: 0,
@@ -76,6 +70,8 @@ export default class ColorPicker extends BaseComponent {
         this._updateAttributes();
         this._refresh();
         this._refreshDisabled();
+
+        $.setData(this._menuNode, { input: this._node });
     }
 
     /**
@@ -97,7 +93,15 @@ export default class ColorPicker extends BaseComponent {
 
         if (this._modal) {
             Modal.init(this._modal).dispose();
+
+            $.removeEvent(this._modal, 'show.ui.modal');
+            $.removeEvent(this._modal, 'shown.ui.modal');
+            $.removeEvent(this._modal, 'hide.ui.modal');
+            $.removeEvent(this._modal, 'hidden.ui.modal');
+            $.removeEvent(this._setBtn, 'click.ui.modal');
+
             this._modal = null;
+            this._setBtn = null;
         }
 
         $.removeEvent(this._node, 'change.ui.colorpicker');
@@ -128,9 +132,6 @@ export default class ColorPicker extends BaseComponent {
         this._preview = null;
         this._previewColor = null;
         this._values = null;
-        this._dateOptions = null;
-        this._modal = null;
-        this._setBtn = null;
 
         super.dispose();
     }

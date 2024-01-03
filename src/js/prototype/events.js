@@ -213,11 +213,6 @@ export function _events() {
         return;
     }
 
-    $.addEvent(this._menuNode, 'click.ui.colorpicker', (e) => {
-        // prevent menu node from closing modal
-        e.stopPropagation();
-    });
-
     $.addEvent(this._node, 'input.ui.colorpicker', (_) => {
         const value = $.getValue(this._node);
         const color = parseColor(value);
