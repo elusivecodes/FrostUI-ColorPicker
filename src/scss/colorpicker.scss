@@ -132,10 +132,6 @@
 .colorpicker-disabled {
     pointer-events: none;
     opacity: $colorpicker-disabled-opacity;
-
-    .colorpicker-guide {
-        display: none;
-    }
 }
 
 .input-group-color {

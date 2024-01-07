@@ -152,7 +152,7 @@ export function _renderModal() {
 
     const cancelBtn = $.create('button', {
         class: this.constructor.classes.modalBtnSecondary,
-        text: 'Cancel',
+        text: this.constructor.lang.cancel,
         attributes: {
             'type': 'button',
             'data-ui-dismiss': 'modal',
@@ -163,7 +163,7 @@ export function _renderModal() {
 
     this._setBtn = $.create('button', {
         class: this.constructor.classes.modalBtnPrimary,
-        text: 'Set',
+        text: this.constructor.lang.set,
         attributes: {
             'type': 'button',
             'data-ui-dismiss': 'modal',

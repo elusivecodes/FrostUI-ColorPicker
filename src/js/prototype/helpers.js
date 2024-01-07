@@ -101,14 +101,14 @@ export function _refresh({ updateInputGroup = true } = {}) {
  * Refresh the toggle disabled.
  */
 export function _refreshDisabled() {
-    if (this._native) {
-        return;
-    }
+    const focusableNodes = $.find('[tabindex]', this._menuNode);
 
     if ($.is(this._node, ':disabled')) {
         $.addClass(this._menuNode, this.constructor.classes.disabled);
+        $.setAttribute(focusableNodes, { tabindex: -1 });
     } else {
         $.removeClass(this._menuNode, this.constructor.classes.disabled);
+        $.setAttribute(focusableNodes, { tabindex: 0 });
     }
 };
 

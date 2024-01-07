@@ -175,7 +175,7 @@ export default class ColorPicker extends BaseComponent {
 
         $.setDataset(this._menuNode, { uiAnimating: 'out' });
 
-        const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+        const focusableNodes = $.find('[tabindex]', this._menuNode);
         $.setAttribute(focusableNodes, { tabindex: -1 });
 
         $.fadeOut(this._menuNode, {
@@ -261,8 +261,10 @@ export default class ColorPicker extends BaseComponent {
 
         $.setDataset(this._menuNode, { uiAnimating: 'in' });
 
-        const focusableNodes = $.find('[tabindex="-1"]', this._menuNode);
-        $.setAttribute(focusableNodes, { tabindex: 0 });
+        if (this._isEditable()) {
+            const focusableNodes = $.find('[tabindex]', this._menuNode);
+            $.setAttribute(focusableNodes, { tabindex: 0 });
+        }
 
         if (this._options.appendTo) {
             $.append(this._options.appendTo, this._menuNode);

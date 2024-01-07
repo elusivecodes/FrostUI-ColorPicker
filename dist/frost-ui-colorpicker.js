@@ -227,7 +227,7 @@
 
             $.setDataset(this._menuNode, { uiAnimating: 'out' });
 
-            const focusableNodes = $.find('[tabindex="0"]', this._menuNode);
+            const focusableNodes = $.find('[tabindex]', this._menuNode);
             $.setAttribute(focusableNodes, { tabindex: -1 });
 
             $.fadeOut(this._menuNode, {
@@ -313,8 +313,10 @@
 
             $.setDataset(this._menuNode, { uiAnimating: 'in' });
 
-            const focusableNodes = $.find('[tabindex="-1"]', this._menuNode);
-            $.setAttribute(focusableNodes, { tabindex: 0 });
+            if (this._isEditable()) {
+                const focusableNodes = $.find('[tabindex]', this._menuNode);
+                $.setAttribute(focusableNodes, { tabindex: 0 });
+            }
 
             if (this._options.appendTo) {
                 $.append(this._options.appendTo, this._menuNode);
@@ -810,14 +812,14 @@
      * Refresh the toggle disabled.
      */
     function _refreshDisabled() {
-        if (this._native) {
-            return;
-        }
+        const focusableNodes = $.find('[tabindex]', this._menuNode);
 
         if ($.is(this._node, ':disabled')) {
             $.addClass(this._menuNode, this.constructor.classes.disabled);
+            $.setAttribute(focusableNodes, { tabindex: -1 });
         } else {
             $.removeClass(this._menuNode, this.constructor.classes.disabled);
+            $.setAttribute(focusableNodes, { tabindex: 0 });
         }
     }
     /**
@@ -1089,7 +1091,7 @@
 
         const cancelBtn = $.create('button', {
             class: this.constructor.classes.modalBtnSecondary,
-            text: 'Cancel',
+            text: this.constructor.lang.cancel,
             attributes: {
                 'type': 'button',
                 'data-ui-dismiss': 'modal',
@@ -1100,7 +1102,7 @@
 
         this._setBtn = $.create('button', {
             class: this.constructor.classes.modalBtnPrimary,
-            text: 'Set',
+            text: this.constructor.lang.set,
             attributes: {
                 'type': 'button',
                 'data-ui-dismiss': 'modal',
@@ -1165,9 +1167,11 @@
     ColorPicker.lang = {
         alpha: 'Alpha',
         brightness: 'Brightness',
+        cancel: 'Cancel',
         color: 'Color',
         hue: 'Hue',
         saturation: 'Saturation',
+        set: 'Set',
     };
 
     // ColorPicker static

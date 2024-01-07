@@ -58,9 +58,11 @@ ColorPicker.classes = {
 ColorPicker.lang = {
     alpha: 'Alpha',
     brightness: 'Brightness',
+    cancel: 'Cancel',
     color: 'Color',
     hue: 'Hue',
     saturation: 'Saturation',
+    set: 'Set',
 };
 
 // ColorPicker static
