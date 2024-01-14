@@ -144,11 +144,13 @@ export function _renderModal() {
 
     $.append(modalBody, this._menuNode);
 
-    const btnContainer = $.create('div', {
-        class: this.constructor.classes.modalBtnContainer,
+    $.append(modalContent, modalBody);
+
+    const modalFooter = $.create('div', {
+        class: this.constructor.classes.modalFooter,
     });
 
-    $.append(modalBody, btnContainer);
+    $.append(modalContent, modalFooter);
 
     const cancelBtn = $.create('button', {
         class: this.constructor.classes.modalBtnSecondary,
@@ -159,7 +161,7 @@ export function _renderModal() {
         },
     });
 
-    $.append(btnContainer, cancelBtn);
+    $.append(modalFooter, cancelBtn);
 
     this._setBtn = $.create('button', {
         class: this.constructor.classes.modalBtnPrimary,
@@ -171,7 +173,5 @@ export function _renderModal() {
         },
     });
 
-    $.append(btnContainer, this._setBtn);
-
-    $.append(modalContent, modalBody);
+    $.append(modalFooter, this._setBtn);
 };

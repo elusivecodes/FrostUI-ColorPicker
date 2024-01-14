@@ -1083,11 +1083,13 @@
 
         $.append(modalBody, this._menuNode);
 
-        const btnContainer = $.create('div', {
-            class: this.constructor.classes.modalBtnContainer,
+        $.append(modalContent, modalBody);
+
+        const modalFooter = $.create('div', {
+            class: this.constructor.classes.modalFooter,
         });
 
-        $.append(modalBody, btnContainer);
+        $.append(modalContent, modalFooter);
 
         const cancelBtn = $.create('button', {
             class: this.constructor.classes.modalBtnSecondary,
@@ -1098,7 +1100,7 @@
             },
         });
 
-        $.append(btnContainer, cancelBtn);
+        $.append(modalFooter, cancelBtn);
 
         this._setBtn = $.create('button', {
             class: this.constructor.classes.modalBtnPrimary,
@@ -1110,9 +1112,7 @@
             },
         });
 
-        $.append(btnContainer, this._setBtn);
-
-        $.append(modalContent, modalBody);
+        $.append(modalFooter, this._setBtn);
     }
 
     // ColorPicker default options
@@ -1151,11 +1151,11 @@
         menuPadding: 'p-2',
         modal: 'modal',
         modalBody: 'modal-body',
-        modalBtnContainer: 'text-end mt-4',
-        modalBtnPrimary: 'btn btn-primary ripple ms-2',
-        modalBtnSecondary: 'btn btn-secondary ripple ms-2',
+        modalBtnPrimary: 'btn btn-primary ripple',
+        modalBtnSecondary: 'btn btn-secondary ripple',
         modalContent: 'modal-content',
         modalDialog: 'modal-dialog modal-sm',
+        modalFooter: 'modal-footer',
         preview: 'colorpicker-bar colorpicker-preview',
         saturation: 'colorpicker-saturation',
         spacingHorizontal: 'mt-2',
