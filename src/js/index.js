@@ -45,7 +45,7 @@ ColorPicker.classes = {
     modalBtnPrimary: 'btn btn-primary ripple',
     modalBtnSecondary: 'btn btn-secondary ripple',
     modalContent: 'modal-content',
-    modalDialog: 'modal-dialog modal-sm',
+    modalDialog: 'modal-dialog modal-dialog-centered modal-sm',
     modalFooter: 'modal-footer',
     preview: 'colorpicker-bar colorpicker-preview',
     saturation: 'colorpicker-saturation',
