@@ -1,6 +1,6 @@
 {
     "name": "@fr0st/ui-colorpicker",
-    "version": "2.1.9",
+    "version": "2.1.10",
     "description": "FrostUI-ColorPicker is a free, open-source ColorPicker component for Javascript.",
     "keywords": [
         "ui",
@@ -20,8 +20,8 @@
     "type": "module",
     "files": [
         "dist",
-        "/LICENSE",
-        "/README.md",
+        "LICENSE",
+        "README.md",
         "src"
     ],
     "scripts": {
